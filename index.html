@@ -3,12 +3,30 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Call of Duty: Mobile Class Generator</title>
+		<meta name="description" content="Generate a random COD Class">
+		<meta name="theme-color" content="#000000"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, minimal-ui" />
 		<meta name="apple-mobile-web-app-capable" content="yes" /> 
 	    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 	    <link rel="shortcut icon" type="image/ico" href="assets/favicon.ico" />
 		<link rel="stylesheet" href="styles.css" />
 		<script src="smoothscroll.js"></script>
+		<script type="text/javascript">
+			
+			if ('serviceWorker' in navigator) {
+			  window.addEventListener('load', function() {
+			    navigator.serviceWorker.register('sw.js').then(function(registration) {
+			      // Registration was successful
+			      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+			    }, function(err) {
+			      // registration failed :(
+			      console.log('ServiceWorker registration failed: ', err);
+			    });
+			  });
+			}
+			
+		</script>
 	</head>
 
 	<body>
@@ -119,7 +137,7 @@
 		<div id="footer" class="footer">
 			<span class="copyright" id="copyright">Copyright &copy; G30 2021  & Customized by PreviousCoast0</span>
 			<br />
-			<span class="copyrightLine2" id="copyrightLine2"><a class="attributionLink" id="attributionLink" href="http://codmrandom.com" target="_blank">Original Site</a> by @DaMagicPlays</span>
+			<span class="copyrightLine2" id="copyrightLine2"><a class="attributionLink" id="attributionLink" href="http://codmrandom.com" target="_blank" rel="noreferrer">Original Site</a> by @DaMagicPlays</span>
 		</div>
 		<script src="cod_loadout.js"></script>
 	</body>
