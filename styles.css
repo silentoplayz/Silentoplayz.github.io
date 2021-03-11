@@ -45,9 +45,14 @@ u {
 	text-decoration: none;
 }
 
+.middle {
+	width: 90%;
+	margin: 0 auto;
+}
 @media only screen and (min-width: 1281px) {
 	.middle {
 		width: 40%;
+		max-width: 40%;
 		margin: 0 auto;
 	}
 }
@@ -132,7 +137,7 @@ u {
 	scroll-behavior: smooth;
 	text-align: center;
 	transition: all 1s ease-in-out;
-	width: 90%;
+	/*width: 90%;*/
 	-moz-transition: all 1s ease-in-out;
 	-ms-transition: all 1s ease-in-out;
 	-o-transition: all 1s ease-in-out;
