@@ -26,6 +26,7 @@ html, body {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	-webkit-background-size: cover;
+	touch-action: none;
 }
 
 h2 {
@@ -142,6 +143,7 @@ u {
 	-ms-transition: all 1s ease-in-out;
 	-o-transition: all 1s ease-in-out;
 	-webkit-transition: all 1s ease-in-out;
+	-webkit-overflow-scrolling: touch;
 }
 
 @media only screen and (min-width: 1281px) {
@@ -163,6 +165,7 @@ u {
 		-ms-transition: all 1s ease-in-out;
 		-o-transition: all 1s ease-in-out;
 		-webkit-transition: all 1s ease-in-out;
+		-webkit-overflow-scrolling: touch;
 	}
 }
 

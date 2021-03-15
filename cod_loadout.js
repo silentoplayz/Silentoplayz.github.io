@@ -1,5 +1,5 @@
 function timeout() {
-	document.getElementById("button1").disabled = !0, setTimeout(generate(), 500)
+	document.getElementById("button1").disabled = !0, setTimeout(generate(), 500);
 }
 
 function generate() {
@@ -2516,7 +2516,10 @@ function generate() {
         behavior: 'smooth'
     });
 
-    if (!document.querySelector('#secondary').innerText.includes("PISTOL")){document.querySelector("#secondary1").parentElement.style.display = "none";
-	} else {document.querySelector("#secondary1").parentElement.style.display = "block";
+    if (!document.querySelector('#secondary').innerText.includes("PISTOL")) {
+        document.querySelector("#secondary1").parentElement.style.display = "none";
+	} 
+    else {
+        document.querySelector("#secondary1").parentElement.style.display = "block";
 	}
 }
