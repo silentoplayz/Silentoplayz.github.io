@@ -166,9 +166,6 @@ u {
 		-webkit-transition: all 1s ease-in-out;
 		-webkit-overflow-scrolling: touch !important;
 	}
-	.outputs:focus {
-		background-color: red !important;
-	}
 }
 
 .outputs > :last-child {
