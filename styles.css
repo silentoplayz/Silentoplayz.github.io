@@ -20,13 +20,12 @@ html, body {
 	background-size: cover;
 	height: 100%;
 	max-height: 100%;
-	position: fixed;
+	position: absolute;
 	text-align: center;
 	width: 100%;
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	-webkit-background-size: cover;
-	touch-action: none;
 }
 
 h2 {
@@ -133,7 +132,7 @@ u {
 	margin-left: auto;
 	margin-right: auto;
 	opacity: 0;
-	overflow: auto;
+	overflow: auto !important;
     max-height: 55vh !important;
 	scroll-behavior: smooth;
 	text-align: center;
@@ -143,7 +142,7 @@ u {
 	-ms-transition: all 1s ease-in-out;
 	-o-transition: all 1s ease-in-out;
 	-webkit-transition: all 1s ease-in-out;
-	-webkit-overflow-scrolling: touch;
+	-webkit-overflow-scrolling: touch !important;
 }
 
 @media only screen and (min-width: 1281px) {
@@ -155,7 +154,7 @@ u {
 		margin-left: auto;
 		margin-right: auto;
 		opacity: 0;
-		overflow: auto;
+		overflow: auto !important;
     	max-height: 60vh !important;
 		scroll-behavior: smooth;
 		text-align: center;
@@ -165,7 +164,10 @@ u {
 		-ms-transition: all 1s ease-in-out;
 		-o-transition: all 1s ease-in-out;
 		-webkit-transition: all 1s ease-in-out;
-		-webkit-overflow-scrolling: touch;
+		-webkit-overflow-scrolling: touch !important;
+	}
+	.outputs:focus {
+		background-color: red !important;
 	}
 }
 

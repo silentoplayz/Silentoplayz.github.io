@@ -2510,6 +2510,11 @@ function generate() {
     }
 
     document.getElementById("outputs").style.opacity = 1;
+
+    // on outputs show, disable scroll on all elements except the scrollable outputs div
+    var targetElement = document.getElementById("outputs")
+    bodyScrollLock.disableBodyScroll(targetElement);
+
     document.getElementById("outputs").scroll({
         top: 0,
         left: 0,
