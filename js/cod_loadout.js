@@ -1,3 +1,51 @@
+function copyToClipboard() {
+    
+    // get text from outputs elem and clean it up
+    let myout = document.getElementById("outputs").innerText;
+    let minusCopyBtn = myout.replace(/Copy\s/g, "");
+    let cleaned = minusCopyBtn.replace(/:\n/g,": ");
+
+    // create pseudo element to paste sanitized text and copy to device clipboard, then delete pseudo elem
+    const el = document.createElement('textarea');
+    el.value = cleaned;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    
+    // create popup to confirm copy to clipboard success
+    let timerInterval
+    Swal.fire({
+      title: 'Loadout copied to clipboard!',
+      icon: 'success',
+      timer: 2000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+      showCloseButton: false,
+      backdrop: 'rgba(0,0,0,0.7)',
+      didOpen: () => {
+        // Swal.showLoading()
+        timerInterval = setInterval(() => {
+          const content = Swal.getContent()
+          if (content) {
+            const b = content.querySelector('b')
+            if (b) {
+              b.textContent = Swal.getTimerLeft()
+            }
+          }
+        }, 100)
+      },
+      willClose: () => {
+        clearInterval(timerInterval)
+      }
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        // console.log('I was closed by the timer')
+      }
+    })
+}
+
 function timeout() {
 	document.getElementById("button1").disabled = !0, setTimeout(generate(), 500);
 }

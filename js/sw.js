@@ -7,7 +7,7 @@
 
     // Update 'version' if you need to refresh the cache
     var staticCacheName = 'static';
-    var version = 'v4::';
+    var version = 'v5::';
 
     // Store core files in a cache (including a page to display when offline)
     function updateStaticCache() {
@@ -17,7 +17,8 @@
                     '/cod_loadout.js',
                     '/bodylock.js',
                     '/smoothscroll.js',
-                    '/styles.css',
+                    '/css/styles.css',
+                    '/css/font-awesome.min.css',
                     '/assets/favicon.ico',
                     '/assets/cod_background.jpeg',
                     '/',
