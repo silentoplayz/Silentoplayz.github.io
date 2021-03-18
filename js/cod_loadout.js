@@ -1,13 +1,20 @@
 function copyToClipboard() {
     
     // get text from outputs elem and clean it up
-    let myout = document.getElementById("outputs").innerText;
+    let myout = document.getElementById("outputs").textContent;
     let minusCopyBtn = myout.replace(/Copy\s/g, "");
-    let cleaned = minusCopyBtn.replace(/:\n/g,": ");
+    cleaned = minusCopyBtn.replace(/:\n/g,": ");
+
+
+    ty = cleaned.replace(/\n\s*\n/g, '\n');
+    tr = ty.trim()
+    tw = tr.replace(/\t/g,"")
 
     // create pseudo element to paste sanitized text and copy to device clipboard, then delete pseudo elem
-    const el = document.createElement('textarea');
-    el.value = cleaned;
+    el = document.createElement('textarea');
+    el.setAttribute("id", "copyText");
+    el.value = tw;
+    el.innerText = tw;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
