@@ -14,7 +14,7 @@ html, body {
 .background-container {
 	background-attachment: fixed;
 	background-color: black;
-	background-image: url('assets/cod_background.jpeg');
+	background-image: url('../assets/cod_background.jpeg');
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -172,6 +172,34 @@ u {
 	margin-bottom: 3em;
 }
 
+.sticky {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 5%;
+	right: 3%;
+	float: right;
+	border-radius: 25px;
+	width: 25px;
+	height: 25px;
+	background-color: steelblue;
+	padding: 5px;
+	font-size: 20px;
+}
+
+.copytoclipboard {
+	background-color: inherit;
+	border: none;
+	text-align: center;
+	vertical-align: super;
+	text-transform: uppercase;
+	font-size: 1em;
+	font-weight: 600;
+	letter-spacing: 1px;
+}
+
+.copyIcon {
+	vertical-align: bottom;
+}
 .gradientback {
 	bottom: 35px;
 	height: 60px;
