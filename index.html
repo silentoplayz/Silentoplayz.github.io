@@ -11,33 +11,13 @@
 	    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 	    <link rel="shortcut icon" type="image/ico" href="assets/favicon.ico" />
 		<link rel="stylesheet" href="css/styles.css" />
-		<link rel="stylesheet" href="css/font-awesome.min.css" />
-		<script src="js/smoothscroll.js"></script>
-		<script src="js/sweetalert.js"></script>
-		<script src="js/bodylock.js"></script>
-		<script defer src="js/all.js"></script>
-		<script type="text/javascript">
-			
-			// if ('serviceWorker' in navigator) {
-			//   window.addEventListener('load', function() {
-			//     navigator.serviceWorker.register('sw.js').then(function(registration) {
-			//       // Registration was successful
-			//       console.log('ServiceWorker registration successful with scope: ', registration.scope);
-			//       registration.unregister().then(function(boolean) {
-			// 	      // if boolean = true, unregister is successful
-			// 	      if (boolean === true) {
-			// 	      	console.log("successful unregister")
-			// 	      }
-			// 	    });
-			//     }, function(err) {
-			//       // registration failed :(
-			//       console.log('ServiceWorker registration failed: ', err);
-			//     });
-			//   });
-			// }
-			
-		</script>
-		
+		<link rel="preload" href="css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+		<noscript><link rel="stylesheet" href="css/font-awesome.min.css"></noscript>
+		<script src="js/progressier_script.js" defer></script> 
+		<script src="js/smoothscroll.js" defer></script>
+		<script src="js/sweetalert.js" defer></script>
+		<script src="js/bodylock.js" defer></script>
+		<script defer src="js/all.js" defer></script>
 	</head>
 
 	<body>
@@ -150,6 +130,6 @@
 			<br />
 			<span class="copyrightLine2" id="copyrightLine2"><a class="attributionLink" id="attributionLink" href="http://codmrandom.com" target="_blank" rel="noreferrer">Original Site</a> by @DaMagicPlays</span>
 		</div>
-		<script src="js/cod_loadout.js"></script>
+		<script src="js/cod_loadout.js" defer></script>
 	</body>
 </html>
