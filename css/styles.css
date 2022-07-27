@@ -80,11 +80,11 @@ u {
 }
 
 .button1 {
-	background: steelblue;
+	background: #4682b4;
 	border: 0;
 	border-radius: 3px;
 	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-	color: black;
+	color: #000000;
 	cursor: pointer;
 	display: block;
 	font-size: .75em;
