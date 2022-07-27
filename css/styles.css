@@ -197,6 +197,7 @@ u {
 	font-weight: 600;
 	letter-spacing: 1px;
 	margin-top: 0.075em;
+        color: black !important;
 }
 
 .copyIcon {
