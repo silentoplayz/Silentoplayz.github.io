@@ -4,109 +4,99 @@
 // http://creativecommons.org/publicdomain/zero/1.0/
 
 (function() {
+    const staticCacheName = 'static';
+    const version = 'v5::';
+    const GET_METHOD = 'GET';
+    const TEXT_HTML = 'text/html';
+    const IMAGE = 'image';
 
-    // Update 'version' if you need to refresh the cache
-    var staticCacheName = 'static';
-    var version = 'v5::';
+    const coreFiles = [
+        '/cod_loadout.js',
+        '/bodylock.js',
+        '/smoothscroll.js',
+        '/css/styles.css',
+        '/css/font-awesome.min.css',
+        '/assets/favicon.ico',
+        '/assets/cod_background.jpeg',
+        '/',
+        '/index.html',
+        '/offline.html' // Ensure offline page is cached
+    ];
 
-    // Store core files in a cache (including a page to display when offline)
     function updateStaticCache() {
         return caches.open(version + staticCacheName)
-            .then(function (cache) {
-                return cache.addAll([
-                    '/cod_loadout.js',
-                    '/bodylock.js',
-                    '/smoothscroll.js',
-                    '/css/styles.css',
-                    '/css/font-awesome.min.css',
-                    '/assets/favicon.ico',
-                    '/assets/cod_background.jpeg',
-                    '/',
-                    '/index.html'
-                ]);
-            });
-    };
+            .then(cache => cache.addAll(coreFiles));
+    }
 
-    self.addEventListener('install', function (event) {
+    self.addEventListener('install', event => {
         event.waitUntil(updateStaticCache());
     });
 
-    self.addEventListener('activate', function (event) {
+    self.addEventListener('activate', event => {
         event.waitUntil(
-            caches.keys()
-                .then(function (keys) {
-                    // Remove caches whose name is no longer valid
-                    return Promise.all(keys
-                        .filter(function (key) {
-                          return key.indexOf(version) !== 0;
-                        })
-                        .map(function (key) {
-                          return caches.delete(key);
-                        })
-                    );
-                })
+            caches.keys().then(keys => Promise.all(
+                keys.filter(key => key.indexOf(version) !== 0)
+                    .map(key => caches.delete(key))
+            ))
         );
     });
 
-    self.addEventListener('fetch', function (event) {
-        var request = event.request;
-        // Always fetch non-GET requests from the network
-        if (request.method !== 'GET') {
-            event.respondWith(
-                fetch(request)
-                    .catch(function () {
-                        return caches.match('/offline.html');
-                    })
-            );
+    self.addEventListener('fetch', event => {
+        const { request } = event;
+        if (request.method !== GET_METHOD) {
+            event.respondWith(networkFallbackToCache(request));
             return;
         }
 
-        // For HTML requests, try the network first, fall back to the cache, finally the offline page
-        if (request.headers.get('Accept').indexOf('text/html') !== -1) {
-            // Fix for Chrome bug: https://code.google.com/p/chromium/issues/detail?id=573937
-            if (request.mode != 'navigate') {
-                request = new Request(request.url, {
-                    method: 'GET',
-                    headers: request.headers,
-                    mode: request.mode,
-                    credentials: request.credentials,
-                    redirect: request.redirect
-                });
-            }
-            event.respondWith(
-                fetch(request)
-                    .then(function (response) {
-                        // Stash a copy of this page in the cache
-                        var copy = response.clone();
-                        caches.open(version + staticCacheName)
-                            .then(function (cache) {
-                                cache.put(request, copy);
-                            });
-                        return response;
-                    })
-                    .catch(function () {
-                        return caches.match(request)
-                            .then(function (response) {
-                                return response || caches.match('/offline.html');
-                            })
-                    })
-            );
+        if (request.headers.get('Accept').includes(TEXT_HTML)) {
+            event.respondWith(handleHtmlRequests(request));
             return;
         }
 
-        // For non-HTML requests, look in the cache first, fall back to the network
-        event.respondWith(
-            caches.match(request)
-                .then(function (response) {
-                    return response || fetch(request)
-                        .catch(function () {
-                            // If the request is for an image, show an offline placeholder
-                            if (request.headers.get('Accept').indexOf('image') !== -1) {
-                                return new Response('<svg width="400" height="300" role="img" aria-labelledby="offline-title" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"><title id="offline-title">Offline</title><g fill="none" fill-rule="evenodd"><path fill="#D8D8D8" d="M0 0h400v300H0z"/><text fill="#9B9B9B" font-family="Helvetica Neue,Arial,Helvetica,sans-serif" font-size="72" font-weight="bold"><tspan x="93" y="172">offline</tspan></text></g></svg>', { headers: { 'Content-Type': 'image/svg+xml' }});
-                            }
-                        });
-                })
-        );
+        event.respondWith(handleNonHtmlRequests(request));
     });
 
+    function networkFallbackToCache(request) {
+        return fetch(request).catch(() => caches.match('/offline.html'));
+    }
+
+    function handleHtmlRequests(request) {
+        let fetchRequest = request;
+        if (request.mode !== 'navigate') {
+            fetchRequest = new Request(request.url, {
+                method: GET_METHOD,
+                headers: request.headers,
+                mode: request.mode,
+                credentials: request.credentials,
+                redirect: request.redirect
+            });
+        }
+        return fetch(fetchRequest)
+            .then(response => cacheResponse(response, fetchRequest))
+            .catch(() => fallbackToCache(request));
+    }
+
+    function cacheResponse(response, request) {
+        const copy = response.clone();
+        caches.open(version + staticCacheName)
+            .then(cache => cache.put(request, copy));
+        return response;
+    }
+
+    function fallbackToCache(request) {
+        return caches.match(request)
+            .then(response => response || caches.match('/offline.html'));
+    }
+
+    function handleNonHtmlRequests(request) {
+        return caches.match(request)
+            .then(response => response || fetch(request)
+                .catch(() => offlinePlaceholderForImages(request)));
+    }
+
+    function offlinePlaceholderForImages(request) {
+        if (request.headers.get('Accept').includes(IMAGE)) {
+            return new Response('<svg>...</svg>', { headers: { 'Content-Type': 'image/svg+xml' }});
+        }
+    }
 })();
