@@ -85,6 +85,58 @@ No build step, no dependencies, no `node_modules`. Just open it.
 
 ---
 
+## 🤖 API / Integration
+
+There's no REST API, but the weapon data and generation logic are clean vanilla JS modules that can be used directly in any JavaScript project (Discord bots, Node.js scripts, etc.):
+
+### Using the weapon data
+
+[`js/weapon-data.js`](js/weapon-data.js) exports a single `WEAPON_DATA` object:
+
+```js
+// All weapon names by category
+WEAPON_DATA.weapons['Assault Rifles']  // ['AK-47', 'AK117', ...]
+WEAPON_DATA.weapons['SMGs']            // ['AGR 556', 'CBR4', ...]
+
+// Equipment, perks, scorestreaks, etc.
+WEAPON_DATA.lethal        // ['Frag Grenade', 'Sticky Grenade', ...]
+WEAPON_DATA.tactical      // ['Flashbang Grenade', 'Smoke Grenade', ...]
+WEAPON_DATA.perks.red     // ['Lightweight', 'Flak Jacket', ...]
+WEAPON_DATA.perks.green   // ['Vulture', 'Toughness', ...]
+WEAPON_DATA.perks.blue    // ['Hardline', 'Dead Silence', ...]
+WEAPON_DATA.scorestreaks  // ['UAV', 'Counter-UAV', ...]
+WEAPON_DATA.operatorSkills // ['Purifier', 'War Machine', ...]
+WEAPON_DATA.brClasses     // ['Hacker', 'Ninja', ...]
+
+// Gunsmith attachment pools by slot type
+WEAPON_DATA.attachments['Muzzle']      // ['Tactical Suppressor', ...]
+WEAPON_DATA.attachments['Barrel']      // ['OWC Ranger', ...]
+WEAPON_DATA.attachments['Optic']       // ['Classic Red Dot Sight', ...]
+```
+
+### Discord bot example
+
+```js
+// Minimal random loadout generator for a Discord bot
+const primary = pickRandom(WEAPON_DATA.weapons['Assault Rifles']);
+const secondary = pickRandom(WEAPON_DATA.weapons['Pistols']);
+const lethal = pickRandom(WEAPON_DATA.lethal);
+const tactical = pickRandom(WEAPON_DATA.tactical);
+const perks = [
+  pickRandom(WEAPON_DATA.perks.red),
+  pickRandom(WEAPON_DATA.perks.green),
+  pickRandom(WEAPON_DATA.perks.blue)
+];
+
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+```
+
+The generation logic in [`js/loadout-generator.js`](js/loadout-generator.js) handles weighted attachment rolls, game-accurate slot restrictions, and category-aware weapon selection if you want to port the full experience.
+
+---
+
 ## 📜 Credits
 
 Originally based on [CodMRandom.com](http://codmrandom.com/) by **@DaMagicPlays**.
@@ -97,4 +149,4 @@ Reimagined, upgraded, and redesigned by **[G30](https://github.com/silentoplayz)
 
 ## 📄 License
 
-This project is open source. Feel free to fork, remix, and share.
+This project is licensed under the [MIT License](LICENSE).
