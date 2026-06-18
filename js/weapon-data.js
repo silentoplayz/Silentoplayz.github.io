@@ -223,7 +223,7 @@ const WEAPON_DATA = {
 			'Toughness', 'Tracker', 'Vulture'
 		],
 		blue: [
-			'Alert', 'Assasin', 'Dead Silence',
+			'Alert', 'Assassin', 'Dead Silence',
 			'Demo Expert', 'Engineer', 'Firepower Support',
 			'Hardline', 'High Alert', 'Persistence',
 			'Shrapnel', 'Survival Training', 'Tactical Mask',

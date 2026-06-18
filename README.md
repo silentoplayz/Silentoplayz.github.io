@@ -139,9 +139,7 @@ The generation logic in [`js/loadout-generator.js`](js/loadout-generator.js) han
 
 ## 📜 Credits
 
-Originally based on [CodMRandom.com](http://codmrandom.com/) by **@DaMagicPlays**.
-
-Reimagined, upgraded, and redesigned by **[G30](https://github.com/silentoplayz)** with contributions from **[Andy Nel](https://github.com/andynel)**.
+Created by **[silentoplayz](https://github.com/silentoplayz)** with contributions from **[Andy Nel](https://github.com/andynel)**.
 
 **2026 Revival** — Complete architecture overhaul, modern design system, updated game data, and all new features (lock/re-roll, history, exclusions, weighted attachments, game-accurate logic).
 
