@@ -681,8 +681,13 @@ body {
 	grid-template-columns: 1fr 1fr 1fr;
 }
 
-/* Mobile: stack weapon cards vertically, keep perks 3-col */
+/* Mobile: stack weapon cards vertically, keep perks 3-col, lock scroll when sidebar open */
 @media (max-width: 500px) {
+	body.sidebar-open {
+		overflow: hidden;
+		touch-action: none;
+	}
+
 	.weapons-row {
 		grid-template-columns: 1fr;
 	}

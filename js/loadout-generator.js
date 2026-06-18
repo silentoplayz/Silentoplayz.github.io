@@ -687,6 +687,11 @@ function updateHistoryCount() {
 	countEl.style.display = history.length > 0 ? '' : 'none';
 }
 
+function updateBodyScroll() {
+	const anyOpen = document.querySelector('.history-panel.open, .exclude-panel.open');
+	document.body.classList.toggle('sidebar-open', !!anyOpen);
+}
+
 function toggleHistory() {
 	const panel = document.getElementById('history-panel');
 	const backdrop = document.getElementById('history-backdrop');
@@ -700,6 +705,7 @@ function toggleHistory() {
 		panel.classList.add('open');
 		backdrop.classList.add('open');
 	}
+	updateBodyScroll();
 }
 
 function renderHistory() {
@@ -828,6 +834,7 @@ function toggleExclusions() {
 		panel.classList.add('open');
 		backdrop.classList.add('open');
 	}
+	updateBodyScroll();
 }
 
 function toggleExcludeItem(name, chipEl) {
@@ -1003,5 +1010,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	addSwipeToDismiss(document.getElementById('exclude-panel'), 'left', toggleExclusions);
+	addSwipeToDismiss(document.getElementById('exclude-backdrop'), 'left', toggleExclusions);
 	addSwipeToDismiss(document.getElementById('history-panel'), 'right', toggleHistory);
+	addSwipeToDismiss(document.getElementById('history-backdrop'), 'right', toggleHistory);
 });
