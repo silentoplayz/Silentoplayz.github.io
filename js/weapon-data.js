@@ -1,6 +1,7 @@
 /**
  * COD Mobile Weapon & Game Data
  * Updated for 2026 (through Season 5 2026)
+ * Last audited: June 17, 2026
  *
  * Sources: COD Mobile Fandom Wiki, ZillionGamer,
  *          MobileMatters.gg, Reddit, IGN, Activision
@@ -25,7 +26,7 @@ const WEAPON_DATA = {
 			'Krig 6', 'Lachmann-556', 'LK24', 'M4', 'M13',
 			'M16', 'Maddox', 'Man-O-War', 'Oden',
 			'Peacekeeper MK2', 'RAM-7', 'Swordfish',
-			'Type 25', 'XM4'
+			'Type 19', 'Type 25', 'XM4'
 		],
 
 		'SMGs': [
@@ -34,14 +35,14 @@ const WEAPON_DATA = {
 			'LAPA', 'LC10', 'MAC-10', 'MSMC', 'MX9',
 			'OTs 9', 'PDW-57', 'Pharo', 'PP19 Bizon',
 			'PPSh-41', 'QQ9', 'QXR', 'Razorback', 'RUS-79U',
-			'Striker 45', 'Switchblade X9', 'TEC-9',
+			'Sten', 'Striker 45', 'Switchblade X9', 'TEC-9',
 			'USS 9', 'VMP'
 		],
 
 		'LMGs': [
 			'Bruen Mk9', 'Chopper', 'Dingo', 'DP-27',
-			'FiNN LMG', 'Hades', 'Holger 26', 'M60',
-			'M91', 'MG34', 'MG42', 'MG82', 'PKM',
+			'FiNN LMG', 'Hades', 'Holger 26', 'M4LMG',
+			'M60', 'M91', 'MG34', 'MG42', 'MG82', 'PKM',
 			'RAAL MG', 'RPD', 'S36', 'SA87',
 			'Stoner 63', 'UL736'
 		],
@@ -65,7 +66,7 @@ const WEAPON_DATA = {
 		],
 
 		'Pistols': [
-			'.50 GS', 'Ballistic Knife', 'Crossbow', 'Dobvra',
+			'.50 GS', 'Crossbow', 'Dobvra',
 			'J358', 'L-CAR 9', 'Machine Pistol', 'MW11',
 			'Nail Gun', 'Renetti', 'Shorty'
 		],
@@ -75,11 +76,12 @@ const WEAPON_DATA = {
 		],
 
 		'Melee': [
-			'Baseball Bat', 'Bowie Knife', 'Butterfly Knife',
-			'Combat Knife', 'Enforcer', 'Ice Axe',
-			'Kali Sticks', 'Karambit', 'Katana', 'Knife',
-			'Machete', 'Nunchucks', 'Prizefighters', 'Sai',
-			'Shovel', 'Sickle', 'Spiked Bat', 'Sword', 'Wrench'
+			'Ballistic Knife', 'Baseball Bat', 'Bowie Knife',
+			'Butterfly Knife', 'Combat Knife', 'Enforcer',
+			'Ice Axe', 'Kali Sticks', 'Karambit', 'Katana',
+			'Knife', 'Machete', 'Nunchucks', 'Prizefighters',
+			'Sai', 'Shovel', 'Sickle', 'Spear', 'Spiked Bat',
+			'Sword', 'Tonfa', 'Wrench'
 		]
 	},
 
@@ -196,7 +198,9 @@ const WEAPON_DATA = {
 		'K9 Unit', 'Kinetic Armor', 'Equalizer',
 		'TAK-5', 'H.I.V.E.', 'Reactor Core', 'Claw',
 		'Ballista EM3', 'Gravity Vortex Gun',
-		'Misdirection Device', 'Munitions Box'
+		'Misdirection Device', 'Munitions Box',
+		'Havoc', 'Barricade', 'Control Field',
+		'Tactical Deploy'
 	],
 
 	/* ═══════════════════════════════════════
@@ -206,7 +210,9 @@ const WEAPON_DATA = {
 		red: [
 			'Lightweight', 'Flak Jacket', 'Fast Recover',
 			'Persistence', 'Restock', 'Overclock',
-			'Agile', 'Skulker', 'Iron Lungs'
+			'Agile', 'Skulker', 'Iron Lungs',
+			'Tactician', 'Pinpoint', 'Dauntless',
+			'Slide Stabilizers'
 		],
 		green: [
 			'Vulture', 'Toughness', 'Cold-Blooded',
@@ -233,7 +239,9 @@ const WEAPON_DATA = {
 		'VTOL', 'Advanced UAV', 'Chopper Gunner',
 		'Gunship', 'MQ-27 Dragonfire', 'Hawk X3',
 		'Guardian', 'Emergency Airdrop', 'Flamenaut',
-		'Iron Rain'
+		'RC-XD', 'Bomb Drone', 'Wheelson',
+		'Overload UAV', 'SAM Turret', 'Shield Turret',
+		'R.A.P.S.', 'AC-130'
 	],
 
 	/* ═══════════════════════════════════════

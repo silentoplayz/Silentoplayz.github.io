@@ -887,6 +887,33 @@ function renderExclusionPanel() {
 		`;
 		btn.addEventListener('click', () => wrapper.classList.toggle('open'));
 
+		// Select all / Deselect all action bar
+		const actions = document.createElement('div');
+		actions.className = 'exclude-category-actions';
+
+		const selectAllBtn = document.createElement('button');
+		selectAllBtn.type = 'button';
+		selectAllBtn.className = 'exclude-action-btn';
+		selectAllBtn.textContent = 'Exclude All';
+		selectAllBtn.addEventListener('click', () => {
+			items.forEach(name => exclusions.add(name));
+			saveExclusions();
+			updateCategoryUI(wrapper, items);
+		});
+
+		const deselectAllBtn = document.createElement('button');
+		deselectAllBtn.type = 'button';
+		deselectAllBtn.className = 'exclude-action-btn exclude-action-include';
+		deselectAllBtn.textContent = 'Include All';
+		deselectAllBtn.addEventListener('click', () => {
+			items.forEach(name => exclusions.delete(name));
+			saveExclusions();
+			updateCategoryUI(wrapper, items);
+		});
+
+		actions.appendChild(selectAllBtn);
+		actions.appendChild(deselectAllBtn);
+
 		const itemsContainer = document.createElement('div');
 		itemsContainer.className = 'exclude-items';
 
@@ -900,9 +927,27 @@ function renderExclusionPanel() {
 		});
 
 		wrapper.appendChild(btn);
+		wrapper.appendChild(actions);
 		wrapper.appendChild(itemsContainer);
 		listEl.appendChild(wrapper);
 	});
+}
+
+/** Update all chips and category count after bulk select/deselect. */
+function updateCategoryUI(wrapper, items) {
+	const chips = wrapper.querySelectorAll('.exclude-chip');
+	chips.forEach(chip => {
+		if (exclusions.has(chip.textContent)) {
+			chip.classList.add('excluded');
+		} else {
+			chip.classList.remove('excluded');
+		}
+	});
+	const countEl = wrapper.querySelector('.exclude-category-count');
+	const excluded = items.filter(i => exclusions.has(i)).length;
+	if (countEl) {
+		countEl.textContent = excluded > 0 ? `${excluded}/${items.length}` : '';
+	}
 }
 
 /* ---------- Init ---------- */

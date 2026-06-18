@@ -52,8 +52,8 @@
 	--font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
 
 	/* Spacing */
-	--container-max: 640px;
-	--gap: 12px;
+	--container-max: 860px;
+	--gap: 14px;
 	--radius: 12px;
 	--radius-sm: 8px;
 
@@ -82,21 +82,13 @@ body {
 	position: fixed;
 	inset: 0;
 	background:
-		url('../assets/cod_background.jpeg') center / cover no-repeat fixed;
-	z-index: -2;
-}
-
-.bg-overlay::after {
-	content: '';
-	position: absolute;
-	inset: 0;
-	background:
 		linear-gradient(180deg,
 			rgba(6, 6, 11, 0.88) 0%,
 			rgba(6, 6, 11, 0.75) 40%,
 			rgba(6, 6, 11, 0.92) 100%
-		);
-	z-index: -1;
+		),
+		url('../assets/cod_background.jpeg') center / cover no-repeat;
+	z-index: -2;
 }
 
 /* --- Container --- */
@@ -485,7 +477,7 @@ body {
 	align-self: flex-end;
 	display: flex;
 	gap: 6px;
-	margin-bottom: calc(var(--gap) * -1);
+	margin-bottom: 0;
 }
 
 .copy-btn {
@@ -521,7 +513,7 @@ body {
 	-webkit-backdrop-filter: blur(20px);
 	border: 1px solid var(--bg-card-border);
 	border-radius: var(--radius);
-	padding: 20px;
+	padding: 24px;
 	opacity: 0;
 	transform: translateY(16px);
 	animation: card-enter 0.5s var(--ease-out-expo) forwards;
@@ -565,12 +557,12 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 10px;
+	margin-bottom: 12px;
 }
 
 .card-label {
 	font-family: var(--font-display);
-	font-size: 0.7rem;
+	font-size: 0.75rem;
 	font-weight: 700;
 	letter-spacing: 2px;
 	text-transform: uppercase;
@@ -579,7 +571,7 @@ body {
 
 .card-badge {
 	font-family: var(--font-display);
-	font-size: 0.65rem;
+	font-size: 0.7rem;
 	font-weight: 600;
 	letter-spacing: 1px;
 	text-transform: uppercase;
@@ -592,7 +584,7 @@ body {
 
 .card-weapon {
 	font-family: var(--font-display);
-	font-size: 1.5rem;
+	font-size: 1.75rem;
 	font-weight: 700;
 	color: var(--text-primary);
 	margin-bottom: 12px;
@@ -601,7 +593,7 @@ body {
 
 .card-value {
 	font-family: var(--font-display);
-	font-size: 1.15rem;
+	font-size: 1.3rem;
 	font-weight: 600;
 	color: var(--text-primary);
 	line-height: 1.3;
@@ -611,26 +603,26 @@ body {
 .card-attachments {
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
+	gap: 8px;
 }
 
 .attachment-tag {
 	display: flex;
 	align-items: baseline;
-	gap: 8px;
-	font-size: 0.82rem;
+	gap: 10px;
+	font-size: 0.88rem;
 	color: var(--text-secondary);
 	line-height: 1.4;
 }
 
 .attachment-slot {
 	font-family: var(--font-display);
-	font-size: 0.65rem;
+	font-size: 0.68rem;
 	font-weight: 700;
 	letter-spacing: 1px;
 	text-transform: uppercase;
 	color: var(--accent-gold);
-	min-width: 75px;
+	min-width: 90px;
 	flex-shrink: 0;
 }
 
@@ -658,7 +650,7 @@ body {
 
 /* --- Compact Card --- */
 .card-compact {
-	padding: 16px 20px;
+	padding: 18px 24px;
 }
 
 .card-compact .card-header {
@@ -951,6 +943,45 @@ html {
 	color: var(--perk-red);
 	margin-left: auto;
 	margin-right: 8px;
+}
+
+.exclude-category-actions {
+	display: none;
+	gap: 6px;
+	padding: 6px 4px 2px;
+}
+
+.exclude-category.open .exclude-category-actions {
+	display: flex;
+}
+
+.exclude-action-btn {
+	font-family: var(--font-body);
+	font-size: 0.65rem;
+	font-weight: 600;
+	padding: 3px 10px;
+	border-radius: 100px;
+	border: 1px solid rgba(224, 84, 84, 0.25);
+	background: rgba(224, 84, 84, 0.08);
+	color: rgba(224, 84, 84, 0.8);
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.exclude-action-btn:hover {
+	background: rgba(224, 84, 84, 0.15);
+	color: rgba(224, 84, 84, 1);
+}
+
+.exclude-action-btn.exclude-action-include {
+	border-color: rgba(84, 200, 120, 0.25);
+	background: rgba(84, 200, 120, 0.08);
+	color: rgba(84, 200, 120, 0.8);
+}
+
+.exclude-action-btn.exclude-action-include:hover {
+	background: rgba(84, 200, 120, 0.15);
+	color: rgba(84, 200, 120, 1);
 }
 
 .exclude-items {
