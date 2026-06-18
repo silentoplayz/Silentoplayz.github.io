@@ -261,8 +261,11 @@ body {
 	-webkit-tap-highlight-color: transparent;
 }
 
-.history-backdrop.open {
-	display: block;
+/* Only show backdrops on mobile — desktop keeps both sidebars open */
+@media (max-width: 500px) {
+	.history-backdrop.open {
+		display: block;
+	}
 }
 
 .history-panel {
