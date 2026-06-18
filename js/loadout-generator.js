@@ -917,7 +917,9 @@ function renderExclusionPanel() {
 		const itemsContainer = document.createElement('div');
 		itemsContainer.className = 'exclude-items';
 
-		items.forEach(name => {
+		const sortedItems = items.slice().sort((a, b) => a.localeCompare(b));
+
+		sortedItems.forEach(name => {
 			const chip = document.createElement('button');
 			chip.type = 'button';
 			chip.className = 'exclude-chip' + (exclusions.has(name) ? ' excluded' : '');

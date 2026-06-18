@@ -9,6 +9,8 @@
  * Data structure: simple arrays for the random generator.
  * Attachments are shared pools by slot type — the generator
  * picks 5 random slot categories and one attachment from each.
+ *
+ * Items within each array are sorted alphabetically.
  */
 
 const WEAPON_DATA = {
@@ -23,9 +25,9 @@ const WEAPON_DATA = {
 			'BAL-27', 'BK57', 'BP50', 'CR-56 AMAX', 'DR-H',
 			'EM2', 'FFAR 1', 'FR .556', 'Grau 5.56', 'Groza',
 			'HBRa3', 'HVK-30', 'ICR-1', 'Kilo 141', 'KN-44',
-			'Krig 6', 'Lachmann-556', 'LAG 53', 'LK24', 'M4',
-			'M13', 'M16', 'Maddox', 'Man-O-War', 'Oden',
-			'Peacekeeper MK2', 'RAM-7', 'Swordfish',
+			'Krig 6', 'Lachmann-556', 'LAG 53', 'LK24',
+			'M4', 'M13', 'M16', 'Maddox', 'Man-O-War',
+			'Oden', 'Peacekeeper MK2', 'RAM-7', 'Swordfish',
 			'Type 19', 'Type 25', 'Vargo-S', 'XM4'
 		],
 
@@ -41,16 +43,16 @@ const WEAPON_DATA = {
 
 		'LMGs': [
 			'Bruen MK9', 'Chopper', 'Dingo', 'DP27',
-			'Hades', 'Holger 26', 'M4LMG', 'MG42',
-			'MG 82', 'PKM', 'RAAL MG', 'RPD', 'S36',
+			'Hades', 'Holger 26', 'M4LMG', 'MG 82',
+			'MG42', 'PKM', 'RAAL MG', 'RPD', 'S36',
 			'UL736'
 		],
 
 		'Sniper Rifles': [
-			'Arctic .50', 'DL Q33', 'HDR', 'Koshka',
-			'Locus', 'LW3-Tundra', 'M21 EBR', 'NA-45',
-			'Outlaw', 'Rytec AMR', 'SVD', 'XPR-50',
-			'ZRG 20mm', '3-Line Rifle'
+			'3-Line Rifle', 'Arctic .50', 'DL Q33', 'HDR',
+			'Koshka', 'Locus', 'LW3-Tundra', 'M21 EBR',
+			'NA-45', 'Outlaw', 'Rytec AMR', 'SVD',
+			'XPR-50', 'ZRG 20mm'
 		],
 
 		'Marksman Rifles': [
@@ -93,78 +95,79 @@ const WEAPON_DATA = {
 	attachments: {
 
 		'Muzzle': [
-			'Tactical Suppressor', 'OWC Light Suppressor',
-			'Monolithic Suppressor', 'OWC Light Compensator',
-			'MIP Light Flash Guard', 'RTC Light Muzzle Brake',
-			'Agency Suppressor', 'Infantry Compensator',
-			'OWC Eliminator', 'Breacher Device',
-			'MIP Light Muzzle Brake', 'RTC Huge Suppressor'
+			'Agency Suppressor', 'Breacher Device',
+			'Infantry Compensator', 'MIP Light Flash Guard',
+			'MIP Light Muzzle Brake', 'Monolithic Suppressor',
+			'OWC Eliminator', 'OWC Light Compensator',
+			'OWC Light Suppressor', 'RTC Huge Suppressor',
+			'RTC Light Muzzle Brake', 'Tactical Suppressor'
 		],
 
 		'Barrel': [
-			'OWC Ranger', 'MIP Light', 'MIP Light Barrel (Short)',
-			'OWC Marksman', 'MIP Extended Light Barrel',
-			'YKM Integral Suppressor Light', 'RTC CQB',
+			'Built-In Silence Barrel', 'Long-Range Barrel',
+			'MIP Extended Light Barrel', 'MIP Light',
+			'MIP Light Barrel (Short)', 'OWC Marksman',
+			'OWC Ranger', 'Rapid Fire Barrel', 'RTC CQB',
 			'RTC Lightweight', 'RTC Long',
-			'Rapid Fire Barrel', 'Taskforce Barrel',
-			'Long-Range Barrel', 'Well-Forged Barrel',
-			'Built-In Silence Barrel'
+			'Taskforce Barrel', 'Well-Forged Barrel',
+			'YKM Integral Suppressor Light'
 		],
 
 		'Optic': [
-			'Classic Red Dot Sight', 'Red Dot Sight 1',
-			'Red Dot Sight 2', 'Red Dot Sight 3',
-			'Red Dot Sight 4', 'Red Dot Sight 5',
-			'Classic Holographic Sight', 'Holographic Sight 1',
+			'3X Tactical Scope 1', '3X Tactical Scope 2',
+			'3X Tactical Scope 3', '4X Tactical Scope',
+			'6X Tactical Scope', 'Classic Holographic Sight',
+			'Classic Red Dot Sight', 'Holographic Sight 1',
 			'Holographic Sight 2', 'Holographic Sight 3',
-			'Tactical Scope', '3X Tactical Scope 1',
-			'3X Tactical Scope 2', '3X Tactical Scope 3',
-			'4X Tactical Scope', '6X Tactical Scope'
+			'Red Dot Sight 1', 'Red Dot Sight 2',
+			'Red Dot Sight 3', 'Red Dot Sight 4',
+			'Red Dot Sight 5', 'Tactical Scope'
 		],
 
 		'Stock': [
-			'No Stock', 'YKM Light Stock', 'YKM Combat Stock',
-			'MIP Strike Stock', 'RTC Steady Stock',
-			'OWC Skeleton Stock', 'Marathon Stock',
-			'Agile Stock', 'Light Weight Stock'
+			'Agile Stock', 'Light Weight Stock',
+			'Marathon Stock', 'MIP Strike Stock',
+			'No Stock', 'OWC Skeleton Stock',
+			'RTC Steady Stock', 'YKM Combat Stock',
+			'YKM Light Stock'
 		],
 
 		'Perk': [
-			'FMJ', 'Sleight of Hand', 'Wounding', 'Full Ammo',
-			'Disable', 'Tough', 'Long Shot', 'Melee Master',
-			'Fast Switch', 'Bullet Return', 'Wild Hipfire',
-			'Double Kill', 'Fast Reload Kill', 'Stealth Kill',
-			'Empty Reload', 'Headshot XP', 'Rapid Fire'
+			'Bullet Return', 'Disable', 'Double Kill',
+			'Empty Reload', 'Fast Reload Kill', 'Fast Switch',
+			'FMJ', 'Full Ammo', 'Headshot XP', 'Long Shot',
+			'Melee Master', 'Rapid Fire', 'Sleight of Hand',
+			'Stealth Kill', 'Tough', 'Wild Hipfire', 'Wounding'
 		],
 
 		'Laser': [
-			'RTC Laser 1mW', 'MIP Laser 5mW',
-			'OWC Laser - Tactical', '1mW Steady Aim Laser',
-			'5mW Combat Laser', 'Aim Assist Laser'
+			'1mW Steady Aim Laser', '5mW Combat Laser',
+			'Aim Assist Laser', 'MIP Laser 5mW',
+			'OWC Laser - Tactical', 'RTC Laser 1mW'
 		],
 
 		'Underbarrel': [
-			'Strike Foregrip', 'Merc Foregrip',
-			'Operator Foregrip', 'Ranger Foregrip',
-			'Tactical Foregrip A', 'Tactical Foregrip B',
 			'Bipod', 'Field Agent Foregrip',
-			'Infiltrator Foregrip', 'RTC Speed Foregrip',
-			'Patrol Foregrip', 'Snatch Foregrip'
+			'Infiltrator Foregrip', 'Merc Foregrip',
+			'Operator Foregrip', 'Patrol Foregrip',
+			'Ranger Foregrip', 'RTC Speed Foregrip',
+			'Snatch Foregrip', 'Strike Foregrip',
+			'Tactical Foregrip A', 'Tactical Foregrip B'
 		],
 
 		'Ammunition': [
+			'5.45 Caliber Ammo', 'Double Stack Mag',
 			'Extended Mag A', 'Extended Mag B',
-			'Large Extended Mag', 'Fast Reload',
-			'Fast Extended Mag', 'Stopping Power Reload',
-			'Large Caliber Ammo', 'Double Stack Mag',
-			'5.45 Caliber Ammo', 'OTM Mag',
-			'High Explosive Ammo', 'Fragment Ammo'
+			'Fast Extended Mag', 'Fast Reload',
+			'Fragment Ammo', 'High Explosive Ammo',
+			'Large Caliber Ammo', 'Large Extended Mag',
+			'OTM Mag', 'Stopping Power Reload'
 		],
 
 		'Rear Grip': [
-			'Stippled Grip Tape', 'Granulated Grip Tape',
+			'Firm Grip Tape', 'Granulated Grip Tape',
 			'Rubberized Grip Tape', 'Rustle Grip Tape',
-			'Sturdy Grip Tape', 'Firm Grip Tape'
+			'Stippled Grip Tape', 'Sturdy Grip Tape'
 		]
 	},
 
@@ -172,34 +175,34 @@ const WEAPON_DATA = {
 	   EQUIPMENT
 	   ═══════════════════════════════════════ */
 	lethal: [
-		'Frag Grenade', 'Sticky Grenade', 'Trip Mine',
-		'Combat Axe', 'Thermite', 'Molotov Cocktail',
-		'Contact Grenade', 'C4', 'Drill Charge',
-		'Cluster Grenade'
+		'C4', 'Cluster Grenade', 'Combat Axe',
+		'Contact Grenade', 'Drill Charge', 'Frag Grenade',
+		'Molotov Cocktail', 'Sticky Grenade', 'Thermite',
+		'Trip Mine'
 	],
 
 	tactical: [
-		'Flashbang Grenade', 'Smoke Grenade', 'Concussion Grenade',
-		'EMP', 'Trophy System', 'Cryo Bomb',
-		'Gas Grenade', 'Heartbeat Sensor', 'Storm Ball',
-		'Stim Shot', 'Flash Drone', 'Decoy Grenade',
-		'Douser Grenade', 'Echo Grenade', 'Flash Strike',
-		'Inflatable Decoy', 'Trip Sensor'
+		'Concussion Grenade', 'Cryo Bomb', 'Decoy Grenade',
+		'Douser Grenade', 'Echo Grenade', 'EMP',
+		'Flash Drone', 'Flash Strike', 'Flashbang Grenade',
+		'Gas Grenade', 'Heartbeat Sensor', 'Inflatable Decoy',
+		'Smoke Grenade', 'Stim Shot', 'Storm Ball',
+		'Trip Sensor', 'Trophy System'
 	],
 
 	/* ═══════════════════════════════════════
 	   OPERATOR SKILLS
 	   ═══════════════════════════════════════ */
 	operatorSkills: [
-		'Purifier', 'War Machine', 'Death Machine',
-		'Tempest', 'Transform Shield', 'Sparrow',
-		'Annihilator', 'Ballistic Shield',
-		'Bull Charge', 'Shadow Blade', 'Gravity Spikes',
-		'K9 Unit', 'Kinetic Armor', 'Equalizer',
-		'TAK-5', 'H.I.V.E.', 'Reactor Core', 'Claw',
-		'Ballista EM3', 'Gravity Vortex Gun',
-		'Misdirection Device', 'Munitions Box',
-		'Havoc', 'Control Field', 'Tac-Deploy'
+		'Annihilator', 'Ballista EM3', 'Ballistic Shield',
+		'Bull Charge', 'Claw', 'Control Field',
+		'Death Machine', 'Equalizer', 'Gravity Spikes',
+		'Gravity Vortex Gun', 'H.I.V.E.', 'Havoc',
+		'K9 Unit', 'Kinetic Armor', 'Misdirection Device',
+		'Munitions Box', 'Purifier', 'Reactor Core',
+		'Shadow Blade', 'Sparrow', 'Tac-Deploy',
+		'TAK-5', 'Tempest', 'Transform Shield',
+		'War Machine'
 	],
 
 	/* ═══════════════════════════════════════
@@ -207,24 +210,24 @@ const WEAPON_DATA = {
 	   ═══════════════════════════════════════ */
 	perks: {
 		red: [
-			'Lightweight', 'Flak Jacket', 'Fast Recover',
-			'Restock', 'Overclock',
-			'Agile', 'Skulker', 'Iron Lungs',
-			'Tactician', 'Pin Point', 'Dauntless',
-			'Slide Stabilizers', 'Martyrdom'
+			'Agile', 'Dauntless', 'Fast Recover',
+			'Flak Jacket', 'Iron Lungs', 'Lightweight',
+			'Martyrdom', 'Overclock', 'Pin Point',
+			'Restock', 'Skulker', 'Slide Stabilizers',
+			'Tactician'
 		],
 		green: [
-			'Vulture', 'Toughness', 'Cold-Blooded',
-			'Quick Fix', 'Tracker', 'Ghost',
-			'Gung-Ho', 'Hard Wired', 'Amped',
-			'Recon', 'Spycraft', 'Serpentine'
+			'Amped', 'Cold-Blooded', 'Ghost',
+			'Gung-Ho', 'Hard Wired', 'Quick Fix',
+			'Recon', 'Serpentine', 'Spycraft',
+			'Toughness', 'Tracker', 'Vulture'
 		],
 		blue: [
-			'Hardline', 'Dead Silence', 'Engineer',
-			'High Alert', 'Shrapnel', 'Demo Expert',
-			'Tactical Mask', 'Persistence', 'Alert',
-			'Firepower Support', 'Unit Support',
-			'Survival Training', 'Assasin'
+			'Alert', 'Assasin', 'Dead Silence',
+			'Demo Expert', 'Engineer', 'Firepower Support',
+			'Hardline', 'High Alert', 'Persistence',
+			'Shrapnel', 'Survival Training', 'Tactical Mask',
+			'Unit Support'
 		]
 	},
 
@@ -232,38 +235,33 @@ const WEAPON_DATA = {
 	   SCORESTREAKS
 	   ═══════════════════════════════════════ */
 	scorestreaks: [
-		'UAV', 'Counter-UAV', 'Shock RC',
-		'Hunter Killer Drone', 'Care Package',
-		'Predator Missile', 'Sentry Gun',
-		'Lightning Strike', 'Orbital Laser',
-		'Stealth Chopper', 'Swarm', 'Cluster Strike',
-		'Napalm Strike', 'EMP Systems', 'XS1 Goliath',
-		'VTOL', 'Advanced UAV', 'Chopper Gunner',
-		'Gunship', 'MQ-27 Dragonfire', 'Hawk X3',
-		'Guardian', 'Emergency Airdrop', 'Flamenaut',
-		'RC-XD', 'Bomb Drone', 'Wheelson', 'Wheelson-HS',
-		'Overload UAV', 'SAM Turret', 'Shield Turret',
-		'R.A.P.S.', 'AC-130', 'Strafe Run'
+		'AC-130', 'Advanced UAV', 'Bomb Drone',
+		'Care Package', 'Chopper Gunner', 'Cluster Strike',
+		'Counter-UAV', 'Emergency Airdrop', 'EMP Systems',
+		'Flamenaut', 'Guardian', 'Gunship',
+		'Hawk X3', 'Hunter Killer Drone', 'Lightning Strike',
+		'MQ-27 Dragonfire', 'Napalm Strike', 'Orbital Laser',
+		'Overload UAV', 'Predator Missile', 'R.A.P.S.',
+		'RC-XD', 'SAM Turret', 'Sentry Gun',
+		'Shield Turret', 'Shock RC', 'Stealth Chopper',
+		'Strafe Run', 'Swarm', 'UAV',
+		'VTOL', 'Wheelson', 'Wheelson-HS',
+		'XS1 Goliath'
 	],
 
 	/* ═══════════════════════════════════════
 	   BATTLE ROYALE CLASSES
 	   ═══════════════════════════════════════ */
 	brClasses: [
-		// Disrupt
-		'Hacker', 'Misdirection', 'Rewind',
-		'Shock Wave', 'Smoke Bomber', 'Trap Master', 'Trickster',
-		// Stealth
-		'Jet Boost', 'Ninja', 'Poltergeist', 'Pumped',
-		'Quick Strike', 'Tactical Bouncer', 'Teleporter',
-		// Support
-		'Kinetic Station', 'Medic', 'Refitter',
-		'Revive', 'Tactical Mirror',
-		// Defense
-		'Defender', 'Desperado', 'Igniter',
-		'Spotter', 'Toxic Overload',
-		// Tracker
-		'Airborne', 'Clown', 'Mechanic',
-		'Ravager Launcher', 'Scout'
+		'Airborne', 'Clown', 'Defender',
+		'Desperado', 'Hacker', 'Igniter',
+		'Jet Boost', 'Kinetic Station', 'Mechanic',
+		'Medic', 'Misdirection', 'Ninja',
+		'Poltergeist', 'Pumped', 'Quick Strike',
+		'Ravager Launcher', 'Refitter', 'Revive',
+		'Rewind', 'Scout', 'Shock Wave',
+		'Smoke Bomber', 'Spotter', 'Tactical Bouncer',
+		'Tactical Mirror', 'Teleporter', 'Toxic Overload',
+		'Trap Master', 'Trickster'
 	]
 };
