@@ -254,6 +254,15 @@ body {
 /* --- History Panel (Slide-in Drawer) --- */
 .history-backdrop {
 	display: none;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 940;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.history-backdrop.open {
+	display: block;
 }
 
 .history-panel {
@@ -282,6 +291,7 @@ body {
 	align-items: center;
 	justify-content: space-between;
 	padding: 20px 20px 16px;
+	padding-top: max(20px, env(safe-area-inset-top, 20px));
 	border-bottom: 1px solid var(--bg-card-border);
 	flex-shrink: 0;
 }

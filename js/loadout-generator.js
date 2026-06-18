@@ -689,13 +689,16 @@ function updateHistoryCount() {
 
 function toggleHistory() {
 	const panel = document.getElementById('history-panel');
+	const backdrop = document.getElementById('history-backdrop');
 	const isOpen = panel.classList.contains('open');
 
 	if (isOpen) {
 		panel.classList.remove('open');
+		backdrop.classList.remove('open');
 	} else {
 		renderHistory();
 		panel.classList.add('open');
+		backdrop.classList.add('open');
 	}
 }
 
@@ -814,13 +817,16 @@ function updateExcludeCount() {
 
 function toggleExclusions() {
 	const panel = document.getElementById('exclude-panel');
+	const backdrop = document.getElementById('exclude-backdrop');
 	const isOpen = panel.classList.contains('open');
 
 	if (isOpen) {
 		panel.classList.remove('open');
+		backdrop.classList.remove('open');
 	} else {
 		renderExclusionPanel();
 		panel.classList.add('open');
+		backdrop.classList.add('open');
 	}
 }
 
@@ -968,7 +974,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	function collapseSidebarsIfNarrow(e) {
 		if (e.matches) {
 			document.getElementById('exclude-panel')?.classList.remove('open');
+			document.getElementById('exclude-backdrop')?.classList.remove('open');
 			document.getElementById('history-panel')?.classList.remove('open');
+			document.getElementById('history-backdrop')?.classList.remove('open');
 		}
 	}
 	narrowQuery.addEventListener('change', collapseSidebarsIfNarrow);
