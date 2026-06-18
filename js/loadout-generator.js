@@ -980,4 +980,28 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 	narrowQuery.addEventListener('change', collapseSidebarsIfNarrow);
+
+	// Swipe-to-close sidebars on mobile
+	function addSwipeToDismiss(panel, direction, toggleFn) {
+		let startX = 0;
+		let startY = 0;
+		panel.addEventListener('touchstart', (e) => {
+			startX = e.touches[0].clientX;
+			startY = e.touches[0].clientY;
+		}, { passive: true });
+		panel.addEventListener('touchend', (e) => {
+			const dx = e.changedTouches[0].clientX - startX;
+			const dy = Math.abs(e.changedTouches[0].clientY - startY);
+			// Require horizontal swipe > 60px and more horizontal than vertical
+			if (dy < Math.abs(dx) && (
+				(direction === 'left' && dx < -60) ||
+				(direction === 'right' && dx > 60)
+			)) {
+				if (panel.classList.contains('open')) toggleFn();
+			}
+		}, { passive: true });
+	}
+
+	addSwipeToDismiss(document.getElementById('exclude-panel'), 'left', toggleExclusions);
+	addSwipeToDismiss(document.getElementById('history-panel'), 'right', toggleHistory);
 });
