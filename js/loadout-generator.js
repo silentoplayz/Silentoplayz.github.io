@@ -616,6 +616,7 @@ function loadFromURL() {
 
 	currentLoadout = loadoutData;
 	renderLoadout(loadoutData);
+	saveToHistory(loadoutData);
 
 	// Clean the URL without reloading
 	history.replaceState(null, '', location.pathname);
