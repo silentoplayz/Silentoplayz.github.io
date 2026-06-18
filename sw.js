@@ -3,7 +3,7 @@
  * Cache-first strategy for offline support
  */
 
-const CACHE_NAME = 'codm-loadout-v3';
+const CACHE_NAME = 'codm-loadout-v4';
 const ASSETS = [
 	'./',
 	'./index.html',

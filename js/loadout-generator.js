@@ -672,6 +672,12 @@ function saveToHistory(loadoutData) {
 	} catch { /* localStorage full — silently fail */ }
 
 	updateHistoryCount();
+
+	// Re-render history panel if it's currently open
+	const panel = document.getElementById('history-panel');
+	if (panel.classList.contains('open')) {
+		renderHistory();
+	}
 }
 
 function updateHistoryCount() {
@@ -683,16 +689,13 @@ function updateHistoryCount() {
 
 function toggleHistory() {
 	const panel = document.getElementById('history-panel');
-	const backdrop = document.getElementById('history-backdrop');
 	const isOpen = panel.classList.contains('open');
 
 	if (isOpen) {
 		panel.classList.remove('open');
-		backdrop.classList.remove('open');
 	} else {
 		renderHistory();
 		panel.classList.add('open');
-		backdrop.classList.add('open');
 	}
 }
 
@@ -783,9 +786,6 @@ function loadFromHistory(entry) {
 
 	currentLoadout = loadoutData;
 	renderLoadout(loadoutData);
-
-	// Close the history panel
-	toggleHistory();
 }
 
 /* ---------- Exclusions ---------- */
@@ -814,16 +814,13 @@ function updateExcludeCount() {
 
 function toggleExclusions() {
 	const panel = document.getElementById('exclude-panel');
-	const backdrop = document.getElementById('exclude-backdrop');
 	const isOpen = panel.classList.contains('open');
 
 	if (isOpen) {
 		panel.classList.remove('open');
-		backdrop.classList.remove('open');
 	} else {
 		renderExclusionPanel();
 		panel.classList.add('open');
-		backdrop.classList.add('open');
 	}
 }
 
