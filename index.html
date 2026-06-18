@@ -72,6 +72,7 @@
 				</div>
 			</header>
 
+
 			<!-- Loadout Results -->
 			<section id="loadout-results" class="loadout-results" aria-live="polite">
 
@@ -85,34 +86,37 @@
 					</button>
 				</div>
 
-				<!-- Primary Weapon -->
-				<div class="loadout-card" data-category="primary">
-					<div class="card-header">
-						<span class="card-label">Primary Weapon</span>
-						<div class="card-header-right">
-							<span class="card-badge" id="primary-type"></span>
-							<button type="button" class="lock-btn" data-lock-key="primary" onclick="toggleLock(this)" title="Lock this section">
-								<i class="fa-solid fa-lock-open"></i>
-							</button>
+				<!-- Weapons Row -->
+				<div class="loadout-row weapons-row">
+					<!-- Primary Weapon -->
+					<div class="loadout-card" data-category="primary">
+						<div class="card-header">
+							<span class="card-label">Primary Weapon</span>
+							<div class="card-header-right">
+								<span class="card-badge" id="primary-type"></span>
+								<button type="button" class="lock-btn" data-lock-key="primary" onclick="toggleLock(this)" title="Lock this section">
+									<i class="fa-solid fa-lock-open"></i>
+								</button>
+							</div>
 						</div>
+						<div class="card-weapon" id="primary-name"></div>
+						<div class="card-attachments" id="primary-attachments"></div>
 					</div>
-					<div class="card-weapon" id="primary-name"></div>
-					<div class="card-attachments" id="primary-attachments"></div>
-				</div>
 
-				<!-- Secondary Weapon -->
-				<div class="loadout-card" data-category="secondary">
-					<div class="card-header">
-						<span class="card-label">Secondary Weapon</span>
-						<div class="card-header-right">
-							<span class="card-badge" id="secondary-type"></span>
-							<button type="button" class="lock-btn" data-lock-key="secondary" onclick="toggleLock(this)" title="Lock this section">
-								<i class="fa-solid fa-lock-open"></i>
-							</button>
+					<!-- Secondary Weapon -->
+					<div class="loadout-card" data-category="secondary">
+						<div class="card-header">
+							<span class="card-label">Secondary Weapon</span>
+							<div class="card-header-right">
+								<span class="card-badge" id="secondary-type"></span>
+								<button type="button" class="lock-btn" data-lock-key="secondary" onclick="toggleLock(this)" title="Lock this section">
+									<i class="fa-solid fa-lock-open"></i>
+								</button>
+							</div>
 						</div>
+						<div class="card-weapon" id="secondary-name"></div>
+						<div class="card-attachments" id="secondary-attachments"></div>
 					</div>
-					<div class="card-weapon" id="secondary-name"></div>
-					<div class="card-attachments" id="secondary-attachments"></div>
 				</div>
 
 				<!-- Equipment Row -->

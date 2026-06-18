@@ -960,4 +960,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// Check for shared loadout in URL
 	loadFromURL();
+
+	// Auto-collapse sidebars when viewport gets too narrow (zoom / resize)
+	const narrowQuery = window.matchMedia('(max-width: 900px)');
+	function collapseSidebarsIfNarrow(e) {
+		if (e.matches) {
+			document.getElementById('exclude-panel')?.classList.remove('open');
+			document.getElementById('history-panel')?.classList.remove('open');
+		}
+	}
+	narrowQuery.addEventListener('change', collapseSidebarsIfNarrow);
 });

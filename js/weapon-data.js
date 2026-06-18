@@ -208,20 +208,23 @@ const WEAPON_DATA = {
 	perks: {
 		red: [
 			'Lightweight', 'Flak Jacket', 'Fast Recover',
-			'Persistence', 'Restock', 'Overclock',
+			'Restock', 'Overclock',
 			'Agile', 'Skulker', 'Iron Lungs',
-			'Tactician', 'Pinpoint', 'Dauntless',
-			'Slide Stabilizers'
+			'Tactician', 'Pin Point', 'Dauntless',
+			'Slide Stabilizers', 'Martyrdom'
 		],
 		green: [
 			'Vulture', 'Toughness', 'Cold-Blooded',
 			'Quick Fix', 'Tracker', 'Ghost',
-			'Gung-Ho', 'Hard Wired'
+			'Gung-Ho', 'Hard Wired', 'Amped',
+			'Recon', 'Spycraft', 'Serpentine'
 		],
 		blue: [
 			'Hardline', 'Dead Silence', 'Engineer',
 			'High Alert', 'Shrapnel', 'Demo Expert',
-			'Tactical Mask'
+			'Tactical Mask', 'Persistence', 'Alert',
+			'Firepower Support', 'Unit Support',
+			'Survival Training', 'Assasin'
 		]
 	},
 
@@ -238,16 +241,16 @@ const WEAPON_DATA = {
 		'VTOL', 'Advanced UAV', 'Chopper Gunner',
 		'Gunship', 'MQ-27 Dragonfire', 'Hawk X3',
 		'Guardian', 'Emergency Airdrop', 'Flamenaut',
-		'RC-XD', 'Bomb Drone', 'Wheelson',
+		'RC-XD', 'Bomb Drone', 'Wheelson', 'Wheelson-HS',
 		'Overload UAV', 'SAM Turret', 'Shield Turret',
-		'R.A.P.S.', 'AC-130'
+		'R.A.P.S.', 'AC-130', 'Strafe Run'
 	],
 
 	/* ═══════════════════════════════════════
 	   BATTLE ROYALE CLASSES
 	   ═══════════════════════════════════════ */
 	brClasses: [
-		// Disturb
+		// Disrupt
 		'Hacker', 'Misdirection', 'Rewind',
 		'Shock Wave', 'Smoke Bomber', 'Trap Master', 'Trickster',
 		// Stealth
