@@ -531,6 +531,13 @@ body {
 	transform: translateY(16px);
 	animation: card-enter 0.5s var(--ease-out-expo) forwards;
 	animation-play-state: paused;
+	transition: transform 0.25s var(--ease-out-expo), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.loadout-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(212, 168, 83, 0.06);
+	border-color: rgba(212, 168, 83, 0.18);
 }
 
 .loadout-results.visible .loadout-card {
@@ -708,6 +715,17 @@ body {
 	.loadout-row-3 .card-value {
 		font-size: 0.95rem;
 	}
+
+	/* Always show lock buttons on mobile (no hover state) */
+	.lock-btn {
+		opacity: 0.5;
+	}
+
+	/* Disable hover lift on touch devices */
+	.loadout-card:hover {
+		transform: none;
+		box-shadow: none;
+	}
 }
 
 /* --- Perk Dots --- */
@@ -780,11 +798,13 @@ body {
 	flex-direction: column;
 	align-items: center;
 	gap: 2px;
-	padding: 10px 20px;
-	background: linear-gradient(to top, var(--bg-deep), rgba(6, 6, 11, 0.95), transparent);
+	padding: 14px 20px;
+	padding-bottom: max(14px, env(safe-area-inset-bottom, 14px));
+	background: linear-gradient(to top, var(--bg-deep) 40%, rgba(6, 6, 11, 0.92) 75%, transparent);
 	font-size: 0.68rem;
 	color: var(--text-muted);
 	z-index: 50;
+	letter-spacing: 0.3px;
 }
 
 .footer a {
@@ -849,6 +869,17 @@ html {
 ::selection {
 	background: var(--accent-gold-dim);
 	color: var(--text-primary);
+}
+
+/* --- Focus-visible for keyboard accessibility --- */
+:focus-visible {
+	outline: 2px solid var(--accent-gold);
+	outline-offset: 2px;
+	border-radius: var(--radius-sm);
+}
+
+button:focus:not(:focus-visible) {
+	outline: none;
 }
 
 /* --- Lock Buttons --- */
