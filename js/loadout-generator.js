@@ -66,6 +66,24 @@ function weightedRandom(weights) {
 	return Number(entries[entries.length - 1][0]);
 }
 
+/**
+ * Copy text to clipboard with fallback for older browsers / non-HTTPS.
+ */
+async function writeToClipboard(text) {
+	try {
+		await navigator.clipboard.writeText(text);
+	} catch {
+		const ta = document.createElement('textarea');
+		ta.value = text;
+		ta.style.position = 'fixed';
+		ta.style.opacity = '0';
+		document.body.appendChild(ta);
+		ta.select();
+		document.execCommand('copy');
+		document.body.removeChild(ta);
+	}
+}
+
 /* ---------- attachment slot logic ---------- */
 const ALL_ATTACHMENT_SLOTS = [
 	'Muzzle', 'Barrel', 'Optic', 'Stock', 'Perk',
@@ -168,6 +186,11 @@ const CATEGORY_TYPE_MAP = {
 	'Melee': 'melee'
 };
 
+/** Reverse map: short type code → category name */
+const SHORT_CATEGORY_MAP = Object.fromEntries(
+	Object.entries(CATEGORY_TYPE_MAP).map(([k, v]) => [v, k])
+);
+
 /* ---------- lock state ---------- */
 const locks = {
 	primary: false,
@@ -202,73 +225,64 @@ function toggleLock(btn) {
 }
 
 /* ---------- main generator ---------- */
+
+/** Primary weapon category pool. */
+const PRIMARY_CATEGORIES = [
+	'Assault Rifles', 'SMGs', 'LMGs', 'Sniper Rifles',
+	'Shotguns', 'Marksman Rifles'
+];
+
+/** Secondary weapon category pool. */
+const SECONDARY_CATEGORIES = ['Pistols', 'Launchers', 'Melee'];
+
+/**
+ * Build a category→weapons map for the given category list,
+ * then pick a weapon, its type code, and generate attachments.
+ * If locked and a previous loadout exists, reuse from prev.
+ */
+function generateWeapon(categoryPool, lockKey, prev, defaultType) {
+	if (locks[lockKey] && prev) {
+		return {
+			weapon: prev[lockKey],
+			type: prev[`${lockKey}Type`],
+			attachments: prev[`${lockKey}Attachments`]
+		};
+	}
+	const pool = {};
+	for (const cat of categoryPool) {
+		if (WEAPON_DATA.weapons[cat]) pool[cat] = WEAPON_DATA.weapons[cat];
+	}
+	const weapon = pickCategory(pool);
+	return {
+		weapon,
+		type: CATEGORY_TYPE_MAP[weapon.category] || defaultType,
+		attachments: generateAttachments(weapon.category)
+	};
+}
+
 function generateLoadout() {
 	const btn = document.getElementById('generate-btn');
 	btn.classList.remove('idle');
 
 	const prev = currentLoadout;
 
-	// Pick primary weapon (from any category that has Gunsmith + non-secondary categories)
-	let primary, primaryType, primaryAttachments;
-	if (locks.primary && prev) {
-		primary = prev.primary;
-		primaryType = prev.primaryType;
-		primaryAttachments = prev.primaryAttachments;
-	} else {
-		const primaryCategories = {};
-		for (const cat of [
-			'Assault Rifles', 'SMGs', 'LMGs', 'Sniper Rifles',
-			'Shotguns', 'Marksman Rifles'
-		]) {
-			if (WEAPON_DATA.weapons[cat]) {
-				primaryCategories[cat] = WEAPON_DATA.weapons[cat];
-			}
-		}
-		primary = pickCategory(primaryCategories);
-		primaryType = CATEGORY_TYPE_MAP[primary.category] || 'ar';
-		primaryAttachments = generateAttachments(primary.category);
-	}
+	// Pick weapons
+	const primary = generateWeapon(PRIMARY_CATEGORIES, 'primary', prev, 'ar');
+	const secondary = generateWeapon(SECONDARY_CATEGORIES, 'secondary', prev, 'pistol');
 
-	// Pick secondary weapon (pistol, launcher, or melee)
-	let secondary, secondaryType, secondaryAttachments;
-	if (locks.secondary && prev) {
-		secondary = prev.secondary;
-		secondaryType = prev.secondaryType;
-		secondaryAttachments = prev.secondaryAttachments;
-	} else {
-		const secondaryCategories = {};
-		for (const cat of ['Pistols', 'Launchers', 'Melee']) {
-			if (WEAPON_DATA.weapons[cat]) {
-				secondaryCategories[cat] = WEAPON_DATA.weapons[cat];
-			}
-		}
-		secondary = pickCategory(secondaryCategories);
-		secondaryType = CATEGORY_TYPE_MAP[secondary.category] || 'pistol';
-		secondaryAttachments = generateAttachments(secondary.category);
-	}
-
-	// Equipment
+	// Simple locked-or-pick fields
 	const lethal = (locks.lethal && prev) ? prev.lethal : pickFiltered(WEAPON_DATA.lethal);
 	const tactical = (locks.tactical && prev) ? prev.tactical : pickFiltered(WEAPON_DATA.tactical);
-
-	// Operator skill
 	const operator = (locks.operator && prev) ? prev.operator : pickFiltered(WEAPON_DATA.operatorSkills);
-
-	// Perks (one from each slot)
 	const perk1 = (locks.perk1 && prev) ? prev.perk1 : pickFiltered(WEAPON_DATA.perks.red);
 	const perk2 = (locks.perk2 && prev) ? prev.perk2 : pickFiltered(WEAPON_DATA.perks.green);
 	const perk3 = (locks.perk3 && prev) ? prev.perk3 : pickFiltered(WEAPON_DATA.perks.blue);
-
-	// Scorestreaks (pick 3 unique)
 	const scorestreaks = (locks.scorestreaks && prev) ? prev.scorestreaks : pickNFiltered(WEAPON_DATA.scorestreaks, 3);
-
-	// BR Class
 	const brClass = (locks.brClass && prev) ? prev.brClass : pickFiltered(WEAPON_DATA.brClasses);
 
-	// --- Render to DOM ---
 	const loadoutData = {
-		primary, primaryType, primaryAttachments,
-		secondary, secondaryType, secondaryAttachments,
+		primary: primary.weapon, primaryType: primary.type, primaryAttachments: primary.attachments,
+		secondary: secondary.weapon, secondaryType: secondary.type, secondaryAttachments: secondary.attachments,
 		lethal, tactical, operator,
 		perk1, perk2, perk3,
 		scorestreaks, brClass
@@ -303,31 +317,25 @@ function renderAttachmentHTML(attachments) {
 	}).join('');
 }
 
+/** Render a weapon card (primary or secondary) into the DOM. */
+function renderWeaponCard(prefix, weaponData, type, attachments) {
+	const typeEl = document.getElementById(`${prefix}-type`);
+	typeEl.textContent = weaponData.category;
+	typeEl.setAttribute('data-type', type);
+	document.getElementById(`${prefix}-name`).textContent = weaponData.weapon;
+	document.getElementById(`${prefix}-attachments`).innerHTML =
+		renderAttachmentHTML(attachments);
+}
+
 function renderLoadout(data) {
-	// Primary
-	const primaryTypeEl = document.getElementById('primary-type');
-	primaryTypeEl.textContent = data.primary.category;
-	primaryTypeEl.setAttribute('data-type', data.primaryType);
-	document.getElementById('primary-name').textContent = data.primary.weapon;
-	document.getElementById('primary-attachments').innerHTML =
-		renderAttachmentHTML(data.primaryAttachments);
+	// Weapons
+	renderWeaponCard('primary', data.primary, data.primaryType, data.primaryAttachments);
+	renderWeaponCard('secondary', data.secondary, data.secondaryType, data.secondaryAttachments);
 
-	// Secondary
-	const secondaryTypeEl = document.getElementById('secondary-type');
-	secondaryTypeEl.textContent = data.secondary.category;
-	secondaryTypeEl.setAttribute('data-type', data.secondaryType);
-	document.getElementById('secondary-name').textContent = data.secondary.weapon;
-	document.getElementById('secondary-attachments').innerHTML =
-		renderAttachmentHTML(data.secondaryAttachments);
-
-	// Equipment
+	// Simple text fields
 	document.getElementById('lethal-name').textContent = data.lethal;
 	document.getElementById('tactical-name').textContent = data.tactical;
-
-	// Operator Skill
 	document.getElementById('operator-name').textContent = data.operator;
-
-	// Perks
 	document.getElementById('perk1-name').textContent = data.perk1;
 	document.getElementById('perk2-name').textContent = data.perk2;
 	document.getElementById('perk3-name').textContent = data.perk3;
@@ -359,88 +367,54 @@ function renderLoadout(data) {
 }
 
 /* ---------- Copy to clipboard ---------- */
+
+/** Extract filled attachment text lines from a weapon's attachment container. */
+function extractAttachmentLines(containerId) {
+	return Array.from(
+		document.querySelectorAll(`#${containerId} .attachment-tag:not(.attachment-empty)`)
+	).filter(el => !el.querySelector('.empty-label')).map(el => {
+		const slot = el.querySelector('.attachment-slot')?.textContent || '';
+		const name = el.querySelector('.attachment-name')?.textContent || '';
+		return `  ${slot}: ${name}`;
+	}).join('\n');
+}
+
 async function copyLoadout() {
 	const results = document.getElementById('loadout-results');
 	if (!results.classList.contains('visible')) return;
 
 	const primary = document.getElementById('primary-name').textContent;
 	const primaryType = document.getElementById('primary-type').textContent;
-	const primaryAtts = Array.from(
-		document.querySelectorAll('#primary-attachments .attachment-tag:not(.attachment-empty)')
-	).filter(el => !el.querySelector('.empty-label')).map(el => {
-		const slot = el.querySelector('.attachment-slot')?.textContent || '';
-		const name = el.querySelector('.attachment-name')?.textContent || '';
-		return `  ${slot}: ${name}`;
-	}).join('\n');
+	const primaryAtts = extractAttachmentLines('primary-attachments');
 
 	const secondary = document.getElementById('secondary-name').textContent;
 	const secondaryType = document.getElementById('secondary-type').textContent;
-	const secondaryAtts = Array.from(
-		document.querySelectorAll('#secondary-attachments .attachment-tag:not(.attachment-empty)')
-	).filter(el => !el.querySelector('.empty-label')).map(el => {
-		const slot = el.querySelector('.attachment-slot')?.textContent || '';
-		const name = el.querySelector('.attachment-name')?.textContent || '';
-		return `  ${slot}: ${name}`;
-	}).join('\n');
-
-	const lethal = document.getElementById('lethal-name').textContent;
-	const tactical = document.getElementById('tactical-name').textContent;
-	const operator = document.getElementById('operator-name').textContent;
-	const perk1 = document.getElementById('perk1-name').textContent;
-	const perk2 = document.getElementById('perk2-name').textContent;
-	const perk3 = document.getElementById('perk3-name').textContent;
-	const scorestreaks = Array.from(
-		document.querySelectorAll('#scorestreak-list .scorestreak-tag')
-	).map(el => el.textContent).join(', ');
-	const brClass = document.getElementById('br-class-name').textContent;
+	const secondaryAtts = extractAttachmentLines('secondary-attachments');
 
 	const lines = [
 		`Primary Weapon (${primaryType}): ${primary}`,
+		primaryAtts ? `Attachments:\n${primaryAtts}` : 'Attachments: None',
+		'',
+		`Secondary Weapon (${secondaryType}): ${secondary}`,
 	];
-	if (primaryAtts) {
-		lines.push(`Attachments:`, primaryAtts);
-	} else {
-		lines.push(`Attachments: None`);
-	}
-	lines.push('');
-	lines.push(`Secondary Weapon (${secondaryType}): ${secondary}`);
-	if (secondaryAtts) {
-		lines.push(`Attachments:`, secondaryAtts);
-	}
+	if (secondaryAtts) lines.push(`Attachments:\n${secondaryAtts}`);
 	lines.push(
 		'',
-		`Lethal: ${lethal}`,
-		`Tactical: ${tactical}`,
-		`Operator Skill: ${operator}`,
+		`Lethal: ${document.getElementById('lethal-name').textContent}`,
+		`Tactical: ${document.getElementById('tactical-name').textContent}`,
+		`Operator Skill: ${document.getElementById('operator-name').textContent}`,
 		'',
-		`Perk 1 (Red): ${perk1}`,
-		`Perk 2 (Green): ${perk2}`,
-		`Perk 3 (Blue): ${perk3}`,
+		`Perk 1 (Red): ${document.getElementById('perk1-name').textContent}`,
+		`Perk 2 (Green): ${document.getElementById('perk2-name').textContent}`,
+		`Perk 3 (Blue): ${document.getElementById('perk3-name').textContent}`,
 		'',
-		`Scorestreaks: ${scorestreaks}`,
-		`BR Class: ${brClass}`
+		`Scorestreaks: ${Array.from(document.querySelectorAll('#scorestreak-list .scorestreak-tag')).map(el => el.textContent).join(', ')}`,
+		`BR Class: ${document.getElementById('br-class-name').textContent}`
 	);
 
-	const text = lines.join('\n');
-
-	try {
-		await navigator.clipboard.writeText(text);
-	} catch {
-		// Fallback for older browsers / non-HTTPS
-		const ta = document.createElement('textarea');
-		ta.value = text;
-		ta.style.position = 'fixed';
-		ta.style.opacity = '0';
-		document.body.appendChild(ta);
-		ta.select();
-		document.execCommand('copy');
-		document.body.removeChild(ta);
-	}
-
-	// Show toast
+	await writeToClipboard(lines.join('\n'));
 	showToast('Copied to clipboard!');
 
-	// Button feedback
 	const btn = document.getElementById('copy-btn');
 	btn.classList.add('copied');
 	setTimeout(() => btn.classList.remove('copied'), 1500);
@@ -461,46 +435,40 @@ function showToast(message) {
 
 /* ---------- Share via URL ---------- */
 
-/** Reverse map: category name → short type code */
-const CATEGORY_SHORT_MAP = Object.fromEntries(
-	Object.entries(CATEGORY_TYPE_MAP).map(([k, v]) => [k, v])
-);
-/** Reverse map: short type code → category name */
-const SHORT_CATEGORY_MAP = Object.fromEntries(
-	Object.entries(CATEGORY_TYPE_MAP).map(([k, v]) => [v, k])
-);
+/** Encode attachment array to pipe-delimited string. */
+function encodeAttachments(attachments) {
+	if (attachments.length === 0) return 'none';
+	return attachments.map(a =>
+		a.empty ? a.slot : `${a.slot}:${a.name}`
+	).join('|');
+}
+
+/** Decode pipe-delimited attachment string to array. */
+function decodeAttachments(str) {
+	if (!str || str === 'none') return [];
+	return str.split('|').map(pair => {
+		if (pair.includes(':')) {
+			const [slot, ...rest] = pair.split(':');
+			return { slot, name: rest.join(':'), empty: false };
+		}
+		return { slot: pair, name: 'Empty', empty: true };
+	});
+}
 
 /**
  * Encode the current loadout into clean URL query params.
  * Uses short param names and pipe-delimited lists.
- * Attachments use 'Slot:Name' pairs separated by pipes.
  */
 function encodeLoadoutToURL(data) {
 	if (!data) return null;
 
 	const params = new URLSearchParams();
 	params.set('pw', data.primary.weapon);
-	params.set('pc', CATEGORY_SHORT_MAP[data.primary.category] || 'ar');
+	params.set('pc', CATEGORY_TYPE_MAP[data.primary.category] || 'ar');
 	params.set('sw', data.secondary.weapon);
-	params.set('sc', CATEGORY_SHORT_MAP[data.secondary.category] || 'pistol');
-
-	// Encode ALL attachment slots: filled as 'Slot:Name', empty as 'Slot'
-	// 'none' = No Gunsmith (launchers/melee), distinguished from all-empty slots
-	if (data.primaryAttachments.length === 0) {
-		params.set('pa', 'none');
-	} else {
-		params.set('pa', data.primaryAttachments.map(a =>
-			a.empty ? a.slot : `${a.slot}:${a.name}`
-		).join('|'));
-	}
-	if (data.secondaryAttachments.length === 0) {
-		params.set('sa', 'none');
-	} else {
-		params.set('sa', data.secondaryAttachments.map(a =>
-			a.empty ? a.slot : `${a.slot}:${a.name}`
-		).join('|'));
-	}
-
+	params.set('sc', CATEGORY_TYPE_MAP[data.secondary.category] || 'pistol');
+	params.set('pa', encodeAttachments(data.primaryAttachments));
+	params.set('sa', encodeAttachments(data.secondaryAttachments));
 	params.set('l', data.lethal);
 	params.set('t', data.tactical);
 	params.set('o', data.operator);
@@ -522,36 +490,21 @@ function decodeLoadoutFromURL() {
 		const primaryCat = SHORT_CATEGORY_MAP[params.get('pc')] || 'Assault Rifles';
 		const secondaryCat = SHORT_CATEGORY_MAP[params.get('sc')] || 'Pistols';
 		const perks = (params.get('pk') || '').split('|');
-		const scorestreaks = (params.get('ss') || '').split('|');
-
-		// Decode attachments: 'none' = No Gunsmith, 'Slot:Name' = filled, 'Slot' = empty
-		const decodeAtts = (str) => {
-			if (!str || str === 'none') return [];
-			return str.split('|').map(pair => {
-				if (pair.includes(':')) {
-					const [slot, ...rest] = pair.split(':');
-					return { slot, name: rest.join(':'), empty: false };
-				}
-				return { slot: pair, name: 'Empty', empty: true };
-			});
-		};
-		const primaryAttachments = decodeAtts(params.get('pa'));
-		const secondaryAttachments = decodeAtts(params.get('sa'));
 
 		return {
 			primary: { category: primaryCat, weapon: params.get('pw') },
 			primaryType: params.get('pc') || 'ar',
-			primaryAttachments,
+			primaryAttachments: decodeAttachments(params.get('pa')),
 			secondary: { category: secondaryCat, weapon: params.get('sw') },
 			secondaryType: params.get('sc') || 'pistol',
-			secondaryAttachments,
+			secondaryAttachments: decodeAttachments(params.get('sa')),
 			lethal: params.get('l') || '',
 			tactical: params.get('t') || '',
 			operator: params.get('o') || '',
 			perk1: perks[0] || '',
 			perk2: perks[1] || '',
 			perk3: perks[2] || '',
-			scorestreaks,
+			scorestreaks: (params.get('ss') || '').split('|'),
 			brClass: params.get('br') || ''
 		};
 	} catch {
@@ -586,20 +539,7 @@ async function shareLoadout() {
 		// User cancelled or share failed — fall through to clipboard
 	}
 
-	// Fallback: copy URL to clipboard
-	try {
-		await navigator.clipboard.writeText(url);
-	} catch {
-		const ta = document.createElement('textarea');
-		ta.value = url;
-		ta.style.position = 'fixed';
-		ta.style.opacity = '0';
-		document.body.appendChild(ta);
-		ta.select();
-		document.execCommand('copy');
-		document.body.removeChild(ta);
-	}
-
+	await writeToClipboard(url);
 	showToast('Share link copied to clipboard!');
 
 	const btn = document.getElementById('share-btn');
@@ -638,7 +578,6 @@ function getHistory() {
 function saveToHistory(loadoutData) {
 	const history = getHistory();
 
-	// Create a summary object for storage
 	const entry = {
 		id: Date.now(),
 		timestamp: new Date().toLocaleString(),
@@ -692,20 +631,47 @@ function updateBodyScroll() {
 	document.body.classList.toggle('sidebar-open', !!anyOpen);
 }
 
-function toggleHistory() {
-	const panel = document.getElementById('history-panel');
-	const backdrop = document.getElementById('history-backdrop');
+/**
+ * Toggle a sidebar panel and its backdrop.
+ * @param {string} panelId - DOM id of the panel
+ * @param {string} backdropId - DOM id of the backdrop
+ * @param {Function} [onOpen] - Called when opening (before adding .open)
+ */
+function toggleSidebar(panelId, backdropId, onOpen) {
+	const panel = document.getElementById(panelId);
+	const backdrop = document.getElementById(backdropId);
 	const isOpen = panel.classList.contains('open');
 
 	if (isOpen) {
 		panel.classList.remove('open');
 		backdrop.classList.remove('open');
 	} else {
-		renderHistory();
+		if (onOpen) onOpen();
 		panel.classList.add('open');
 		backdrop.classList.add('open');
 	}
 	updateBodyScroll();
+}
+
+function toggleHistory() {
+	toggleSidebar('history-panel', 'history-backdrop', renderHistory);
+}
+
+function toggleExclusions() {
+	toggleSidebar('exclude-panel', 'exclude-backdrop', renderExclusionPanel);
+}
+
+/** Render a single weapon line in a history entry. */
+function renderHistoryWeapon(weapon, extraClass) {
+	const filled = weapon.attachments
+		? weapon.attachments.filter(a => !a.empty).length
+		: 0;
+	return `
+		<div class="history-weapon${extraClass ? ' ' + extraClass : ''}">
+			<span class="history-weapon-name">${weapon.weapon}</span>
+			<span class="card-badge" data-type="${weapon.type}">${weapon.category}</span>
+			${filled > 0 ? `<span class="history-att-count">${filled}/5</span>` : ''}
+		</div>`;
 }
 
 function renderHistory() {
@@ -713,26 +679,17 @@ function renderHistory() {
 	const listEl = document.getElementById('history-list');
 	const emptyEl = document.getElementById('history-empty');
 
+	// Clear existing items
+	listEl.querySelectorAll('.history-item').forEach(el => el.remove());
+
 	if (history.length === 0) {
 		emptyEl.style.display = '';
-		// Remove all items but keep empty state
-		listEl.querySelectorAll('.history-item').forEach(el => el.remove());
 		return;
 	}
 
 	emptyEl.style.display = 'none';
 
-	// Clear existing items
-	listEl.querySelectorAll('.history-item').forEach(el => el.remove());
-
 	history.forEach((entry, index) => {
-		const filledPrimary = entry.primary.attachments
-			? entry.primary.attachments.filter(a => !a.empty).length
-			: 0;
-		const filledSecondary = entry.secondary.attachments
-			? entry.secondary.attachments.filter(a => !a.empty).length
-			: 0;
-
 		const item = document.createElement('div');
 		item.className = 'history-item';
 		item.style.animationDelay = `${index * 0.03}s`;
@@ -743,16 +700,8 @@ function renderHistory() {
 				<span class="history-item-time">${entry.timestamp}</span>
 			</div>
 			<div class="history-item-body">
-				<div class="history-weapon">
-					<span class="history-weapon-name">${entry.primary.weapon}</span>
-					<span class="card-badge" data-type="${entry.primary.type}">${entry.primary.category}</span>
-					${filledPrimary > 0 ? `<span class="history-att-count">${filledPrimary}/5</span>` : ''}
-				</div>
-				<div class="history-weapon history-weapon-secondary">
-					<span class="history-weapon-name">${entry.secondary.weapon}</span>
-					<span class="card-badge" data-type="${entry.secondary.type}">${entry.secondary.category}</span>
-					${filledSecondary > 0 ? `<span class="history-att-count">${filledSecondary}/5</span>` : ''}
-				</div>
+				${renderHistoryWeapon(entry.primary, '')}
+				${renderHistoryWeapon(entry.secondary, 'history-weapon-secondary')}
 				<div class="history-meta">
 					<span>${entry.perks.join(' · ')}</span>
 				</div>
@@ -760,7 +709,6 @@ function renderHistory() {
 		`;
 
 		item.addEventListener('click', () => loadFromHistory(entry));
-
 		listEl.appendChild(item);
 	});
 }
@@ -775,7 +723,6 @@ function clearHistory() {
 }
 
 function loadFromHistory(entry) {
-	// Reconstruct the data shape that renderLoadout expects
 	const loadoutData = {
 		primary: { category: entry.primary.category, weapon: entry.primary.weapon },
 		primaryType: entry.primary.type,
@@ -819,22 +766,6 @@ function updateExcludeCount() {
 	const el = document.getElementById('exclude-count');
 	el.textContent = exclusions.size;
 	el.style.display = exclusions.size > 0 ? '' : 'none';
-}
-
-function toggleExclusions() {
-	const panel = document.getElementById('exclude-panel');
-	const backdrop = document.getElementById('exclude-backdrop');
-	const isOpen = panel.classList.contains('open');
-
-	if (isOpen) {
-		panel.classList.remove('open');
-		backdrop.classList.remove('open');
-	} else {
-		renderExclusionPanel();
-		panel.classList.add('open');
-		backdrop.classList.add('open');
-	}
-	updateBodyScroll();
 }
 
 function toggleExcludeItem(name, chipEl) {
@@ -980,10 +911,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const narrowQuery = window.matchMedia('(max-width: 900px)');
 	function collapseSidebarsIfNarrow(e) {
 		if (e.matches) {
-			document.getElementById('exclude-panel')?.classList.remove('open');
-			document.getElementById('exclude-backdrop')?.classList.remove('open');
-			document.getElementById('history-panel')?.classList.remove('open');
-			document.getElementById('history-backdrop')?.classList.remove('open');
+			['exclude-panel', 'exclude-backdrop', 'history-panel', 'history-backdrop']
+				.forEach(id => document.getElementById(id)?.classList.remove('open'));
 		}
 	}
 	narrowQuery.addEventListener('change', collapseSidebarsIfNarrow);
