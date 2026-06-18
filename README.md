@@ -1,4 +1,4 @@
-# 🎯 CODM Loadout Generator
+# 🎯 CODM Random Loadout Generator
 
 A modern, feature-rich random loadout generator for **Call of Duty: Mobile**. Generate completely random class setups with intelligent game logic — covering weapons, Gunsmith attachments, equipment, perks, scorestreaks, operator skills, and Battle Royale classes.
 
