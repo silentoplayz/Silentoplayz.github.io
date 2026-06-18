@@ -19,14 +19,14 @@ const WEAPON_DATA = {
 	weapons: {
 
 		'Assault Rifles': [
-			'AK-47', 'AK117', 'AKBP', 'AS VAL', 'ASM10',
+			'AK-47', 'AK117', 'AS VAL', 'ASM10',
 			'BAL-27', 'BK57', 'BP50', 'CR-56 AMAX', 'DR-H',
 			'EM2', 'FFAR 1', 'FR .556', 'Grau 5.56', 'Groza',
 			'HBRa3', 'HVK-30', 'ICR-1', 'Kilo 141', 'KN-44',
-			'Krig 6', 'Lachmann-556', 'LK24', 'M4', 'M13',
-			'M16', 'Maddox', 'Man-O-War', 'Oden',
+			'Krig 6', 'Lachmann-556', 'LAG 53', 'LK24', 'M4',
+			'M13', 'M16', 'Maddox', 'Man-O-War', 'Oden',
 			'Peacekeeper MK2', 'RAM-7', 'Swordfish',
-			'Type 19', 'Type 25', 'XM4'
+			'Type 19', 'Type 25', 'Vargo-S', 'XM4'
 		],
 
 		'SMGs': [
@@ -40,11 +40,10 @@ const WEAPON_DATA = {
 		],
 
 		'LMGs': [
-			'Bruen Mk9', 'Chopper', 'Dingo', 'DP-27',
-			'FiNN LMG', 'Hades', 'Holger 26', 'M4LMG',
-			'M60', 'M91', 'MG34', 'MG42', 'MG82', 'PKM',
-			'RAAL MG', 'RPD', 'S36', 'SA87',
-			'Stoner 63', 'UL736'
+			'Bruen MK9', 'Chopper', 'Dingo', 'DP27',
+			'Hades', 'Holger 26', 'M4LMG', 'MG42',
+			'MG 82', 'PKM', 'RAAL MG', 'RPD', 'S36',
+			'UL736'
 		],
 
 		'Sniper Rifles': [
@@ -55,7 +54,7 @@ const WEAPON_DATA = {
 		],
 
 		'Marksman Rifles': [
-			'Kilo Bolt-Action', 'M1 Garand', 'MK2 Carbine',
+			'Kilo Bolt-Action', 'M1 Garand', 'MK2',
 			'SKS', 'SO-14', 'SP-R 208', 'Type 63'
 		],
 
@@ -76,12 +75,13 @@ const WEAPON_DATA = {
 		],
 
 		'Melee': [
-			'Ballistic Knife', 'Baseball Bat', 'Bowie Knife',
-			'Butterfly Knife', 'Combat Knife', 'Enforcer',
-			'Ice Axe', 'Kali Sticks', 'Karambit', 'Katana',
-			'Knife', 'Machete', 'Nunchucks', 'Prizefighters',
-			'Sai', 'Shovel', 'Sickle', 'Spear', 'Spiked Bat',
-			'Sword', 'Tonfa', 'Wrench'
+			'Assault Knife', 'Axe', 'Ballistic Knife',
+			'Baseball Bat', 'Butterfly Knife', 'Combat Knife',
+			'Enforcer', 'Ice Axe', 'Kali Sticks', 'Karambit',
+			'Katana', 'Knife', 'Machete', 'Nunchucks',
+			'Prizefighters', 'Sai', 'Scythe', 'Shovel',
+			'Sickle', 'Sledgehammer', 'Spear', 'Spiked Bat',
+			'Sword', 'Wrench'
 		]
 	},
 
@@ -180,11 +180,11 @@ const WEAPON_DATA = {
 
 	tactical: [
 		'Flashbang Grenade', 'Smoke Grenade', 'Concussion Grenade',
-		'EMP Grenade', 'Trophy System', 'Cryo Bomb',
+		'EMP', 'Trophy System', 'Cryo Bomb',
 		'Gas Grenade', 'Heartbeat Sensor', 'Storm Ball',
 		'Stim Shot', 'Flash Drone', 'Decoy Grenade',
-		'Douser Grenade', 'Echo Grenade', 'Inflatable Decoy',
-		'Trip Sensor'
+		'Douser Grenade', 'Echo Grenade', 'Flash Strike',
+		'Inflatable Decoy', 'Trip Sensor'
 	],
 
 	/* ═══════════════════════════════════════
@@ -193,14 +193,13 @@ const WEAPON_DATA = {
 	operatorSkills: [
 		'Purifier', 'War Machine', 'Death Machine',
 		'Tempest', 'Transform Shield', 'Sparrow',
-		'Scythe', 'Annihilator', 'Ballistic Shield',
+		'Annihilator', 'Ballistic Shield',
 		'Bull Charge', 'Shadow Blade', 'Gravity Spikes',
 		'K9 Unit', 'Kinetic Armor', 'Equalizer',
 		'TAK-5', 'H.I.V.E.', 'Reactor Core', 'Claw',
 		'Ballista EM3', 'Gravity Vortex Gun',
 		'Misdirection Device', 'Munitions Box',
-		'Havoc', 'Barricade', 'Control Field',
-		'Tactical Deploy'
+		'Havoc', 'Control Field', 'Tac-Deploy'
 	],
 
 	/* ═══════════════════════════════════════
