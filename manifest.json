@@ -1,0 +1,23 @@
+{
+	"name": "COD Mobile Loadout Generator",
+	"short_name": "CODM Loadout",
+	"description": "Generate a random Call of Duty: Mobile class loadout — weapons, attachments, perks, scorestreaks, and more.",
+	"start_url": "./index.html",
+	"display": "standalone",
+	"background_color": "#06060b",
+	"theme_color": "#0a0a0f",
+	"orientation": "portrait-primary",
+	"icons": [
+		{
+			"src": "assets/apple-touch-icon.png",
+			"sizes": "180x180",
+			"type": "image/png",
+			"purpose": "any maskable"
+		},
+		{
+			"src": "assets/favicon.ico",
+			"sizes": "48x48",
+			"type": "image/x-icon"
+		}
+	]
+}

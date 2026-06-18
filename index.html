@@ -1,133 +1,265 @@
+<!DOCTYPE html>
 <html lang="en-US">
 	<head>
 		<meta charset="UTF-8" />
-		<title>Call of Duty: Mobile Class Generator</title>
-		<meta name="description" content="Generate a random COD Class">
-		<meta name="theme-color" content="#000000"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, minimal-ui" />
-		<meta name="apple-mobile-web-app-capable" content="yes" /> 
-	    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-	    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-	    <link rel="shortcut icon" type="image/ico" href="assets/favicon.ico" />
+		<title>COD Mobile Random Loadout Generator</title>
+		<meta name="description" content="Generate a random Call of Duty: Mobile class loadout — weapons, attachments, perks, scorestreaks, and more." />
+		<meta name="theme-color" content="#0a0a0f" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<!-- Open Graph -->
+		<meta property="og:title" content="COD Mobile Random Loadout Generator" />
+		<meta property="og:description" content="Generate a random Call of Duty: Mobile class loadout — weapons, attachments, perks, scorestreaks, and more." />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://silentoplayz.github.io/" />
+
+		<!-- Icons -->
+		<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+		<link rel="shortcut icon" type="image/x-icon" href="assets/favicon.ico" />
+
+		<!-- Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" />
+
+		<!-- Icons (lightweight) -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+		<!-- PWA Manifest -->
+		<link rel="manifest" href="manifest.json" />
+
+		<!-- Styles -->
 		<link rel="stylesheet" href="css/styles.css" />
-		<link rel="preload" href="css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-		<noscript><link rel="stylesheet" href="css/font-awesome.min.css"></noscript>
-		<script src="js/smoothscroll.js" defer></script>
-		<script src="js/sweetalert.js" defer></script>
-		<script src="js/bodylock.js" defer></script>
-		<script defer src="js/all.js" defer></script>
 	</head>
 
 	<body>
-		<div id="background-container" class="background-container">
-			<span class="top" id="top">
-				Call of Duty: Mobile Random Loadout Generator
-			</span> 
-			<br /><br />
-			<span class="header" id="header">
-				<b>Press "Generate Class" button below to generate a random class loadout.</b>
-			</span>
-			<br /><br />
-			<input type="button" id="button1" class="button1" value="Generate Class" onclick="timeout();" />
-			<br />
-			<div class="middle">
-				<div class="outputs" id="outputs">
-					<div class="sticky" onclick="copyToClipboard()"><button class="copytoclipboard copy-button copyText" aria-label="fas fa-copy" data-clipboard-action="copy" data-clipboard-target="#copyText"><i class="fas fa-copy"></i></button></div>
-					<h2><u>Primary Weapon:</u></h2>
-					<h3>
-						<span id="primary"></span>
-					</h3>
-					<h4><u>Attachments:</u> <br />
-						<span id="primary1"></span>
-					</h4>
-					<h4>
-						<span id="primary2"></span>
-					</h4>
-					<h4>
-						<span id="primary3"></span>
-					</h4>
-					<h4>
-						<span id="primary4"></span>
-					</h4>
-					<h4>
-						<span id="primary5"></span>
-					</h4>
-					<h4>
-						<span id="primary6"></span>
-					</h4>
-					<h4>
-						<span id="primary7"></span>
-					</h4>
-					<h4>
-						<span id="primary8"></span>
-					</h4>
-					<h4>
-						<span id="primary9"></span>
-					</h4>
-					<h2><u>Secondary Weapon:</u></h2>
-					<h3>
-						<span id="secondary"></span>
-					</h3>
-					<h4><u>Attachments:</u> <br />
-						<span id="secondary1"></span>
-					</h4>
-					<h4>
-						<span id="secondary2"></span>
-					</h4>
-					<h4>
-						<span id="secondary3"></span>
-					</h4>
-					<h4>
-						<span id="secondary4"></span>
-					</h4>
-					<h4>
-						<span id="secondary5"></span>
-					</h4>
-					<h4>
-						<span id="secondary6"></span>
-					</h4>
-					<h4>
-						<span id="secondary7"></span>
-					</h4>
-					<h4>
-						<span id="secondary8"></span>
-					</h4>
-					<h2><u>Battle Royale Class:</u></h2>
-					<h3>
-						<span id="brclass"></span>
-					</h3>
-					<h2><u>Lethal Equipment:</u></h2>
-					<h3>
-						<span id="lethal"></span>
-					</h3>
-					<h2><u>Tactical Equipment:</u></h2>
-					<h3>
-						<span id="tactical"></span>
-					</h3>
-					<h2><u>Operator Skill:</u></h2>
-					<h3>
-						<span id="operatorSkill"></span>
-					</h3>
-					<h2><u>Perk Slot #1 (Red):</u></h2>
-					<h3>
-						<span id="perk1"></span>
-					</h3>
-					<h2><u>Perk Slot #2 (Green):</u></h2>
-					<h3>
-						<span id="perk2"></span>
-					</h3>
-					<h2><u>Perk Slot #3 (Blue):</u></h2>
-					<h3>
-						<span id="perk3"></span>
-					</h3>
-				</div>		<!-- end outputs div -->
-			</div>		<!-- end middle div -->
-		</div>		<!-- end background-container div -->
-		<div id="footer" class="footer">
-			<span class="copyright" id="copyright">Copyright &copy; G30 2021  & Customized by PreviousCoast0</span>
-			<br />
-			<span class="copyrightLine2" id="copyrightLine2"><a class="attributionLink" id="attributionLink" href="http://codmrandom.com" target="_blank" rel="noreferrer">Original Site</a> by @DaMagicPlays</span>
+		<!-- Background -->
+		<div class="bg-overlay" aria-hidden="true"></div>
+
+		<!-- Main Content -->
+		<main class="container">
+			<header class="hero">
+				<div class="hero-badge">CALL OF DUTY: MOBILE</div>
+				<h1 class="hero-title">Random Loadout<br />Generator</h1>
+				<p class="hero-subtitle">Press generate to roll a completely random class loadout.</p>
+
+				<div class="hero-actions">
+					<button type="button" id="exclude-btn" class="history-btn" onclick="toggleExclusions()">
+						<i class="fa-solid fa-filter"></i>
+						<span>Exclude</span>
+						<span class="history-count exclude-count" id="exclude-count">0</span>
+					</button>
+					<button type="button" id="generate-btn" class="generate-btn" onclick="generateLoadout()">
+						<span class="btn-icon"><i class="fa-solid fa-crosshairs"></i></span>
+						<span class="btn-text">Generate Class</span>
+					</button>
+					<button type="button" id="history-btn" class="history-btn" onclick="toggleHistory()">
+						<i class="fa-solid fa-clock-rotate-left"></i>
+						<span>History</span>
+						<span class="history-count" id="history-count">0</span>
+					</button>
+				</div>
+			</header>
+
+			<!-- Loadout Results -->
+			<section id="loadout-results" class="loadout-results" aria-live="polite">
+
+				<!-- Copy Button -->
+				<button type="button" id="copy-btn" class="copy-btn" onclick="copyLoadout()" title="Copy loadout to clipboard">
+					<i class="fa-solid fa-copy"></i>
+				</button>
+
+				<!-- Primary Weapon -->
+				<div class="loadout-card" data-category="primary">
+					<div class="card-header">
+						<span class="card-label">Primary Weapon</span>
+						<div class="card-header-right">
+							<span class="card-badge" id="primary-type"></span>
+							<button type="button" class="lock-btn" data-lock-key="primary" onclick="toggleLock(this)" title="Lock this section">
+								<i class="fa-solid fa-lock-open"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-weapon" id="primary-name"></div>
+					<div class="card-attachments" id="primary-attachments"></div>
+				</div>
+
+				<!-- Secondary Weapon -->
+				<div class="loadout-card" data-category="secondary">
+					<div class="card-header">
+						<span class="card-label">Secondary Weapon</span>
+						<div class="card-header-right">
+							<span class="card-badge" id="secondary-type"></span>
+							<button type="button" class="lock-btn" data-lock-key="secondary" onclick="toggleLock(this)" title="Lock this section">
+								<i class="fa-solid fa-lock-open"></i>
+							</button>
+						</div>
+					</div>
+					<div class="card-weapon" id="secondary-name"></div>
+					<div class="card-attachments" id="secondary-attachments"></div>
+				</div>
+
+				<!-- Equipment Row -->
+				<div class="loadout-row">
+					<div class="loadout-card card-compact" data-category="lethal">
+						<div class="card-header">
+							<span class="card-label">Lethal</span>
+							<button type="button" class="lock-btn" data-lock-key="lethal" onclick="toggleLock(this)" title="Lock this section">
+								<i class="fa-solid fa-lock-open"></i>
+							</button>
+						</div>
+						<div class="card-value" id="lethal-name"></div>
+					</div>
+					<div class="loadout-card card-compact" data-category="tactical">
+						<div class="card-header">
+							<span class="card-label">Tactical</span>
+							<button type="button" class="lock-btn" data-lock-key="tactical" onclick="toggleLock(this)" title="Lock this section">
+								<i class="fa-solid fa-lock-open"></i>
+							</button>
+						</div>
+						<div class="card-value" id="tactical-name"></div>
+					</div>
+				</div>
+
+				<!-- Operator Skill -->
+				<div class="loadout-card card-compact" data-category="operator">
+					<div class="card-header">
+						<span class="card-label">Operator Skill</span>
+						<button type="button" class="lock-btn" data-lock-key="operator" onclick="toggleLock(this)" title="Lock this section">
+							<i class="fa-solid fa-lock-open"></i>
+						</button>
+					</div>
+					<div class="card-value" id="operator-name"></div>
+				</div>
+
+				<!-- Perks Row -->
+				<div class="loadout-row loadout-row-3">
+					<div class="loadout-card card-compact" data-category="perk-red">
+						<div class="card-header">
+							<span class="card-label">Perk 1</span>
+							<div class="card-header-right">
+								<span class="perk-dot perk-red-dot"></span>
+								<button type="button" class="lock-btn" data-lock-key="perk1" onclick="toggleLock(this)" title="Lock this section">
+									<i class="fa-solid fa-lock-open"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-value" id="perk1-name"></div>
+					</div>
+					<div class="loadout-card card-compact" data-category="perk-green">
+						<div class="card-header">
+							<span class="card-label">Perk 2</span>
+							<div class="card-header-right">
+								<span class="perk-dot perk-green-dot"></span>
+								<button type="button" class="lock-btn" data-lock-key="perk2" onclick="toggleLock(this)" title="Lock this section">
+									<i class="fa-solid fa-lock-open"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-value" id="perk2-name"></div>
+					</div>
+					<div class="loadout-card card-compact" data-category="perk-blue">
+						<div class="card-header">
+							<span class="card-label">Perk 3</span>
+							<div class="card-header-right">
+								<span class="perk-dot perk-blue-dot"></span>
+								<button type="button" class="lock-btn" data-lock-key="perk3" onclick="toggleLock(this)" title="Lock this section">
+									<i class="fa-solid fa-lock-open"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-value" id="perk3-name"></div>
+					</div>
+				</div>
+
+				<!-- Scorestreaks -->
+				<div class="loadout-card" data-category="scorestreaks">
+					<div class="card-header">
+						<span class="card-label">Scorestreaks</span>
+						<button type="button" class="lock-btn" data-lock-key="scorestreaks" onclick="toggleLock(this)" title="Lock this section">
+							<i class="fa-solid fa-lock-open"></i>
+						</button>
+					</div>
+					<div class="scorestreak-list" id="scorestreak-list"></div>
+				</div>
+
+				<!-- BR Class -->
+				<div class="loadout-card card-compact" data-category="br">
+					<div class="card-header">
+						<span class="card-label">Battle Royale Class</span>
+						<button type="button" class="lock-btn" data-lock-key="brClass" onclick="toggleLock(this)" title="Lock this section">
+							<i class="fa-solid fa-lock-open"></i>
+						</button>
+					</div>
+					<div class="card-value" id="br-class-name"></div>
+				</div>
+
+			</section>
+		</main>
+
+		<!-- Exclusion Panel -->
+		<div id="exclude-backdrop" class="history-backdrop" onclick="toggleExclusions()"></div>
+		<aside id="exclude-panel" class="history-panel exclude-panel">
+			<div class="history-header">
+				<h2 class="history-title"><i class="fa-solid fa-filter"></i> Exclusions</h2>
+				<div class="history-header-actions">
+					<button type="button" class="history-clear-btn" id="exclude-clear-btn" onclick="clearExclusions()" title="Clear all exclusions">
+						<i class="fa-solid fa-rotate-left"></i>
+					</button>
+					<button type="button" class="history-close-btn" onclick="toggleExclusions()" title="Close">
+						<i class="fa-solid fa-xmark"></i>
+					</button>
+				</div>
+			</div>
+			<div class="history-list" id="exclude-list"></div>
+		</aside>
+
+		<!-- History Panel -->
+		<div id="history-backdrop" class="history-backdrop" onclick="toggleHistory()"></div>
+		<aside id="history-panel" class="history-panel">
+			<div class="history-header">
+				<h2 class="history-title"><i class="fa-solid fa-clock-rotate-left"></i> History</h2>
+				<div class="history-header-actions">
+					<button type="button" class="history-clear-btn" id="history-clear-btn" onclick="clearHistory()" title="Clear all history">
+						<i class="fa-solid fa-trash-can"></i>
+					</button>
+					<button type="button" class="history-close-btn" onclick="toggleHistory()" title="Close">
+						<i class="fa-solid fa-xmark"></i>
+					</button>
+				</div>
+			</div>
+			<div class="history-list" id="history-list">
+				<div class="history-empty" id="history-empty">
+					<i class="fa-solid fa-dice"></i>
+					<p>No loadouts generated yet.<br />Hit <strong>Generate Class</strong> to start!</p>
+				</div>
+			</div>
+		</aside>
+
+		<!-- Toast Notification -->
+		<div id="toast" class="toast" role="status" aria-live="polite">
+			<i class="fa-solid fa-check"></i>
+			<span id="toast-text">Loadout copied to clipboard!</span>
 		</div>
-		<script src="js/cod_loadout.js" defer></script>
+
+		<!-- Footer -->
+		<footer class="footer">
+			<span class="footer-credit">Copyright &copy; G30 2021 &amp; Customized by PreviousCoast0</span>
+			<span class="footer-attribution"><a href="http://codmrandom.com" target="_blank" rel="noreferrer">Original Site</a> by @DaMagicPlays</span>
+		</footer>
+
+		<!-- Scripts -->
+		<script src="js/weapon-data.js"></script>
+		<script src="js/loadout-generator.js"></script>
+
+		<!-- Service Worker -->
+		<script>
+			if ('serviceWorker' in navigator) {
+				navigator.serviceWorker.register('sw.js')
+					.catch(() => {});
+			}
+		</script>
 	</body>
 </html>
