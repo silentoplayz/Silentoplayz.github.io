@@ -55,16 +55,16 @@
 				<p class="hero-subtitle">Press generate to roll a completely random class loadout.</p>
 
 				<div class="hero-actions">
-					<button type="button" id="exclude-btn" class="history-btn" onclick="toggleExclusions()">
+					<button type="button" id="exclude-btn" class="history-btn">
 						<i class="fa-solid fa-filter"></i>
 						<span>Exclude</span>
 						<span class="history-count exclude-count" id="exclude-count">0</span>
 					</button>
-					<button type="button" id="generate-btn" class="generate-btn" onclick="generateLoadout()">
+					<button type="button" id="generate-btn" class="generate-btn">
 						<span class="btn-icon"><i class="fa-solid fa-crosshairs"></i></span>
 						<span class="btn-text">Generate Class</span>
 					</button>
-					<button type="button" id="history-btn" class="history-btn" onclick="toggleHistory()">
+					<button type="button" id="history-btn" class="history-btn">
 						<i class="fa-solid fa-clock-rotate-left"></i>
 						<span>History</span>
 						<span class="history-count" id="history-count">0</span>
@@ -78,10 +78,10 @@
 
 				<!-- Action Buttons -->
 				<div class="results-actions">
-					<button type="button" id="copy-btn" class="copy-btn" onclick="copyLoadout()" title="Copy loadout to clipboard">
+					<button type="button" id="copy-btn" class="copy-btn" title="Copy loadout to clipboard">
 						<i class="fa-solid fa-copy"></i>
 					</button>
-					<button type="button" id="share-btn" class="copy-btn" onclick="shareLoadout()" title="Share loadout link">
+					<button type="button" id="share-btn" class="copy-btn" title="Share loadout link">
 						<i class="fa-solid fa-share-nodes"></i>
 					</button>
 				</div>
@@ -94,7 +94,7 @@
 							<span class="card-label">Primary Weapon</span>
 							<div class="card-header-right">
 								<span class="card-badge" id="primary-type"></span>
-								<button type="button" class="lock-btn" data-lock-key="primary" onclick="toggleLock(this)" title="Lock this section">
+								<button type="button" class="lock-btn" data-lock-key="primary" title="Lock this section">
 									<i class="fa-solid fa-lock-open"></i>
 								</button>
 							</div>
@@ -109,7 +109,7 @@
 							<span class="card-label">Secondary Weapon</span>
 							<div class="card-header-right">
 								<span class="card-badge" id="secondary-type"></span>
-								<button type="button" class="lock-btn" data-lock-key="secondary" onclick="toggleLock(this)" title="Lock this section">
+								<button type="button" class="lock-btn" data-lock-key="secondary" title="Lock this section">
 									<i class="fa-solid fa-lock-open"></i>
 								</button>
 							</div>
@@ -124,7 +124,7 @@
 					<div class="loadout-card card-compact" data-category="lethal">
 						<div class="card-header">
 							<span class="card-label">Lethal</span>
-							<button type="button" class="lock-btn" data-lock-key="lethal" onclick="toggleLock(this)" title="Lock this section">
+							<button type="button" class="lock-btn" data-lock-key="lethal" title="Lock this section">
 								<i class="fa-solid fa-lock-open"></i>
 							</button>
 						</div>
@@ -133,7 +133,7 @@
 					<div class="loadout-card card-compact" data-category="tactical">
 						<div class="card-header">
 							<span class="card-label">Tactical</span>
-							<button type="button" class="lock-btn" data-lock-key="tactical" onclick="toggleLock(this)" title="Lock this section">
+							<button type="button" class="lock-btn" data-lock-key="tactical" title="Lock this section">
 								<i class="fa-solid fa-lock-open"></i>
 							</button>
 						</div>
@@ -145,7 +145,7 @@
 				<div class="loadout-card card-compact" data-category="operator">
 					<div class="card-header">
 						<span class="card-label">Operator Skill</span>
-						<button type="button" class="lock-btn" data-lock-key="operator" onclick="toggleLock(this)" title="Lock this section">
+						<button type="button" class="lock-btn" data-lock-key="operator" title="Lock this section">
 							<i class="fa-solid fa-lock-open"></i>
 						</button>
 					</div>
@@ -159,7 +159,7 @@
 							<span class="card-label">Perk 1</span>
 							<div class="card-header-right">
 								<span class="perk-dot perk-red-dot"></span>
-								<button type="button" class="lock-btn" data-lock-key="perk1" onclick="toggleLock(this)" title="Lock this section">
+								<button type="button" class="lock-btn" data-lock-key="perk1" title="Lock this section">
 									<i class="fa-solid fa-lock-open"></i>
 								</button>
 							</div>
@@ -171,7 +171,7 @@
 							<span class="card-label">Perk 2</span>
 							<div class="card-header-right">
 								<span class="perk-dot perk-green-dot"></span>
-								<button type="button" class="lock-btn" data-lock-key="perk2" onclick="toggleLock(this)" title="Lock this section">
+								<button type="button" class="lock-btn" data-lock-key="perk2" title="Lock this section">
 									<i class="fa-solid fa-lock-open"></i>
 								</button>
 							</div>
@@ -183,7 +183,7 @@
 							<span class="card-label">Perk 3</span>
 							<div class="card-header-right">
 								<span class="perk-dot perk-blue-dot"></span>
-								<button type="button" class="lock-btn" data-lock-key="perk3" onclick="toggleLock(this)" title="Lock this section">
+								<button type="button" class="lock-btn" data-lock-key="perk3" title="Lock this section">
 									<i class="fa-solid fa-lock-open"></i>
 								</button>
 							</div>
@@ -196,7 +196,7 @@
 				<div class="loadout-card" data-category="scorestreaks">
 					<div class="card-header">
 						<span class="card-label">Scorestreaks</span>
-						<button type="button" class="lock-btn" data-lock-key="scorestreaks" onclick="toggleLock(this)" title="Lock this section">
+						<button type="button" class="lock-btn" data-lock-key="scorestreaks" title="Lock this section">
 							<i class="fa-solid fa-lock-open"></i>
 						</button>
 					</div>
@@ -207,7 +207,7 @@
 				<div class="loadout-card card-compact" data-category="br">
 					<div class="card-header">
 						<span class="card-label">Battle Royale Class</span>
-						<button type="button" class="lock-btn" data-lock-key="brClass" onclick="toggleLock(this)" title="Lock this section">
+						<button type="button" class="lock-btn" data-lock-key="brClass" title="Lock this section">
 							<i class="fa-solid fa-lock-open"></i>
 						</button>
 					</div>
@@ -218,15 +218,15 @@
 		</main>
 
 		<!-- Exclusion Panel -->
-		<div id="exclude-backdrop" class="history-backdrop" onclick="toggleExclusions()"></div>
+		<div id="exclude-backdrop" class="history-backdrop"></div>
 		<aside id="exclude-panel" class="history-panel exclude-panel">
 			<div class="history-header">
 				<h2 class="history-title"><i class="fa-solid fa-filter"></i> Exclusions</h2>
 				<div class="history-header-actions">
-					<button type="button" class="history-clear-btn" id="exclude-clear-btn" onclick="clearExclusions()" title="Clear all exclusions">
+					<button type="button" class="history-clear-btn" id="exclude-clear-btn" title="Clear all exclusions">
 						<i class="fa-solid fa-rotate-left"></i>
 					</button>
-					<button type="button" class="history-close-btn" onclick="toggleExclusions()" title="Close">
+					<button type="button" class="history-close-btn" id="exclude-close-btn" title="Close">
 						<i class="fa-solid fa-xmark"></i>
 					</button>
 				</div>
@@ -235,15 +235,15 @@
 		</aside>
 
 		<!-- History Panel -->
-		<div id="history-backdrop" class="history-backdrop" onclick="toggleHistory()"></div>
+		<div id="history-backdrop" class="history-backdrop"></div>
 		<aside id="history-panel" class="history-panel">
 			<div class="history-header">
 				<h2 class="history-title"><i class="fa-solid fa-clock-rotate-left"></i> History</h2>
 				<div class="history-header-actions">
-					<button type="button" class="history-clear-btn" id="history-clear-btn" onclick="clearHistory()" title="Clear all history">
+					<button type="button" class="history-clear-btn" id="history-clear-btn" title="Clear all history">
 						<i class="fa-solid fa-trash-can"></i>
 					</button>
-					<button type="button" class="history-close-btn" onclick="toggleHistory()" title="Close">
+					<button type="button" class="history-close-btn" id="history-close-btn" title="Close">
 						<i class="fa-solid fa-xmark"></i>
 					</button>
 				</div>

@@ -899,6 +899,26 @@ function updateCategoryUI(wrapper, items) {
 /* ---------- Init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
 	const btn = document.getElementById('generate-btn');
+
+	// Event bindings
+	document.getElementById('exclude-btn').addEventListener('click', toggleExclusions);
+	btn.addEventListener('click', generateLoadout);
+	document.getElementById('history-btn').addEventListener('click', toggleHistory);
+	document.getElementById('copy-btn').addEventListener('click', copyLoadout);
+	document.getElementById('share-btn').addEventListener('click', shareLoadout);
+	document.getElementById('exclude-backdrop').addEventListener('click', toggleExclusions);
+	document.getElementById('exclude-clear-btn').addEventListener('click', clearExclusions);
+	document.getElementById('exclude-close-btn').addEventListener('click', toggleExclusions);
+	document.getElementById('history-backdrop').addEventListener('click', toggleHistory);
+	document.getElementById('history-clear-btn').addEventListener('click', clearHistory);
+	document.getElementById('history-close-btn').addEventListener('click', toggleHistory);
+
+	// Lock buttons — event delegation
+	document.addEventListener('click', (e) => {
+		const lockBtn = e.target.closest('.lock-btn');
+		if (lockBtn) toggleLock(lockBtn);
+	});
+
 	btn.classList.add('idle');
 	updateHistoryCount();
 	loadExclusions();
