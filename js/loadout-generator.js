@@ -438,7 +438,7 @@ async function copyLoadout() {
 	}
 
 	// Show toast
-	showToast();
+	showToast('Copied to clipboard!');
 
 	// Button feedback
 	const btn = document.getElementById('copy-btn');
@@ -457,6 +457,169 @@ function showToast(message) {
 	toast._timer = setTimeout(() => {
 		toast.classList.remove('show');
 	}, 2200);
+}
+
+/* ---------- Share via URL ---------- */
+
+/** Reverse map: category name → short type code */
+const CATEGORY_SHORT_MAP = Object.fromEntries(
+	Object.entries(CATEGORY_TYPE_MAP).map(([k, v]) => [k, v])
+);
+/** Reverse map: short type code → category name */
+const SHORT_CATEGORY_MAP = Object.fromEntries(
+	Object.entries(CATEGORY_TYPE_MAP).map(([k, v]) => [v, k])
+);
+
+/**
+ * Encode the current loadout into clean URL query params.
+ * Uses short param names and pipe-delimited lists.
+ * Attachments use 'Slot:Name' pairs separated by pipes.
+ */
+function encodeLoadoutToURL(data) {
+	if (!data) return null;
+
+	const params = new URLSearchParams();
+	params.set('pw', data.primary.weapon);
+	params.set('pc', CATEGORY_SHORT_MAP[data.primary.category] || 'ar');
+	params.set('sw', data.secondary.weapon);
+	params.set('sc', CATEGORY_SHORT_MAP[data.secondary.category] || 'pistol');
+
+	// Encode ALL attachment slots: filled as 'Slot:Name', empty as 'Slot'
+	// 'none' = No Gunsmith (launchers/melee), distinguished from all-empty slots
+	if (data.primaryAttachments.length === 0) {
+		params.set('pa', 'none');
+	} else {
+		params.set('pa', data.primaryAttachments.map(a =>
+			a.empty ? a.slot : `${a.slot}:${a.name}`
+		).join('|'));
+	}
+	if (data.secondaryAttachments.length === 0) {
+		params.set('sa', 'none');
+	} else {
+		params.set('sa', data.secondaryAttachments.map(a =>
+			a.empty ? a.slot : `${a.slot}:${a.name}`
+		).join('|'));
+	}
+
+	params.set('l', data.lethal);
+	params.set('t', data.tactical);
+	params.set('o', data.operator);
+	params.set('pk', [data.perk1, data.perk2, data.perk3].join('|'));
+	params.set('ss', data.scorestreaks.join('|'));
+	params.set('br', data.brClass);
+
+	return params.toString();
+}
+
+/**
+ * Decode URL query params back into a renderLoadout data object.
+ */
+function decodeLoadoutFromURL() {
+	const params = new URLSearchParams(location.search);
+	if (!params.has('pw')) return null;
+
+	try {
+		const primaryCat = SHORT_CATEGORY_MAP[params.get('pc')] || 'Assault Rifles';
+		const secondaryCat = SHORT_CATEGORY_MAP[params.get('sc')] || 'Pistols';
+		const perks = (params.get('pk') || '').split('|');
+		const scorestreaks = (params.get('ss') || '').split('|');
+
+		// Decode attachments: 'none' = No Gunsmith, 'Slot:Name' = filled, 'Slot' = empty
+		const decodeAtts = (str) => {
+			if (!str || str === 'none') return [];
+			return str.split('|').map(pair => {
+				if (pair.includes(':')) {
+					const [slot, ...rest] = pair.split(':');
+					return { slot, name: rest.join(':'), empty: false };
+				}
+				return { slot: pair, name: 'Empty', empty: true };
+			});
+		};
+		const primaryAttachments = decodeAtts(params.get('pa'));
+		const secondaryAttachments = decodeAtts(params.get('sa'));
+
+		return {
+			primary: { category: primaryCat, weapon: params.get('pw') },
+			primaryType: params.get('pc') || 'ar',
+			primaryAttachments,
+			secondary: { category: secondaryCat, weapon: params.get('sw') },
+			secondaryType: params.get('sc') || 'pistol',
+			secondaryAttachments,
+			lethal: params.get('l') || '',
+			tactical: params.get('t') || '',
+			operator: params.get('o') || '',
+			perk1: perks[0] || '',
+			perk2: perks[1] || '',
+			perk3: perks[2] || '',
+			scorestreaks,
+			brClass: params.get('br') || ''
+		};
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * Share the current loadout as a URL.
+ * Uses Web Share API if available, falls back to clipboard.
+ */
+async function shareLoadout() {
+	if (!currentLoadout) return;
+
+	const queryString = encodeLoadoutToURL(currentLoadout);
+	if (!queryString) return;
+
+	const url = `${location.origin}${location.pathname}?${queryString}`;
+
+	const shareData = {
+		title: 'CODM Random Loadout',
+		text: `Check out this loadout: ${currentLoadout.primary.weapon} + ${currentLoadout.secondary.weapon}`,
+		url
+	};
+
+	try {
+		if (navigator.share && navigator.canShare?.(shareData)) {
+			await navigator.share(shareData);
+			return;
+		}
+	} catch {
+		// User cancelled or share failed — fall through to clipboard
+	}
+
+	// Fallback: copy URL to clipboard
+	try {
+		await navigator.clipboard.writeText(url);
+	} catch {
+		const ta = document.createElement('textarea');
+		ta.value = url;
+		ta.style.position = 'fixed';
+		ta.style.opacity = '0';
+		document.body.appendChild(ta);
+		ta.select();
+		document.execCommand('copy');
+		document.body.removeChild(ta);
+	}
+
+	showToast('Share link copied to clipboard!');
+
+	const btn = document.getElementById('share-btn');
+	btn.classList.add('copied');
+	setTimeout(() => btn.classList.remove('copied'), 1500);
+}
+
+/**
+ * Check URL on page load for a shared loadout.
+ */
+function loadFromURL() {
+	const loadoutData = decodeLoadoutFromURL();
+	if (!loadoutData) return false;
+
+	currentLoadout = loadoutData;
+	renderLoadout(loadoutData);
+
+	// Clean the URL without reloading
+	history.replaceState(null, '', location.pathname);
+	return true;
 }
 
 /* ---------- History ---------- */
@@ -751,4 +914,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	updateHistoryCount();
 	loadExclusions();
 	updateExcludeCount();
+
+	// Check for shared loadout in URL
+	loadFromURL();
 });

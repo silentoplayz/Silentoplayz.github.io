@@ -14,6 +14,15 @@
 		<meta property="og:description" content="Generate a random Call of Duty: Mobile class loadout — weapons, attachments, perks, scorestreaks, and more." />
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content="https://silentoplayz.github.io/" />
+		<meta property="og:image" content="https://silentoplayz.github.io/og-image.png" />
+		<meta property="og:image:width" content="1024" />
+		<meta property="og:image:height" content="1024" />
+
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="COD Mobile Random Loadout Generator" />
+		<meta name="twitter:description" content="Generate a random Call of Duty: Mobile class loadout — weapons, attachments, perks, scorestreaks, and more." />
+		<meta name="twitter:image" content="https://silentoplayz.github.io/og-image.png" />
 
 		<!-- Icons -->
 		<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
@@ -66,10 +75,15 @@
 			<!-- Loadout Results -->
 			<section id="loadout-results" class="loadout-results" aria-live="polite">
 
-				<!-- Copy Button -->
-				<button type="button" id="copy-btn" class="copy-btn" onclick="copyLoadout()" title="Copy loadout to clipboard">
-					<i class="fa-solid fa-copy"></i>
-				</button>
+				<!-- Action Buttons -->
+				<div class="results-actions">
+					<button type="button" id="copy-btn" class="copy-btn" onclick="copyLoadout()" title="Copy loadout to clipboard">
+						<i class="fa-solid fa-copy"></i>
+					</button>
+					<button type="button" id="share-btn" class="copy-btn" onclick="shareLoadout()" title="Share loadout link">
+						<i class="fa-solid fa-share-nodes"></i>
+					</button>
+				</div>
 
 				<!-- Primary Weapon -->
 				<div class="loadout-card" data-category="primary">

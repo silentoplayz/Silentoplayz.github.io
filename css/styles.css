@@ -487,12 +487,18 @@ body {
 	pointer-events: auto;
 }
 
-/* --- Copy Button --- */
-.copy-btn {
+/* --- Action Buttons (Copy + Share) --- */
+.results-actions {
 	position: sticky;
 	top: 12px;
 	z-index: 10;
 	align-self: flex-end;
+	display: flex;
+	gap: 6px;
+	margin-bottom: calc(var(--gap) * -1);
+}
+
+.copy-btn {
 	background: var(--bg-card);
 	backdrop-filter: blur(20px);
 	-webkit-backdrop-filter: blur(20px);
@@ -503,7 +509,6 @@ body {
 	padding: 10px 14px;
 	cursor: pointer;
 	transition: background 0.2s ease, transform 0.15s var(--ease-spring), color 0.2s ease;
-	margin-bottom: calc(var(--gap) * -1);
 }
 
 .copy-btn:hover {
